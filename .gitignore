@@ -1,0 +1,23 @@
+# Build output
+[Bb]in/
+[Oo]bj/
+[Oo]ut/
+*.user
+*.suo
+
+# Rider / VS
+.vs/
+.idea/
+
+# .NET
+project.lock.json
+*.nupkg
+
+# Secrets — never commit real PayPal credentials or connection strings with passwords.
+# Use `dotnet user-secrets` (development) or environment variables (production).
+appsettings.*.Local.json
+secrets.json
+
+# OS
+.DS_Store
+Thumbs.db
