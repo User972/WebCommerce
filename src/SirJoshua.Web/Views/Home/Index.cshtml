@@ -1,0 +1,1837 @@
+@model SirJoshua.Web.ViewModels.HomeViewModel
+@using System.Globalization
+@{
+    Layout = null;
+    var idID = CultureInfo.GetCultureInfo("id-ID");
+    var inv = CultureInfo.InvariantCulture;
+    Func<int, string> Rp = v => "Rp " + v.ToString("N0", idID);
+}
+<!doctype html>
+<html lang="id">
+<head>
+<script>(function(){try{var t=localStorage.getItem('check-theme');if(t!=='light'&&t!=='dark'){t=window.matchMedia&&window.matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light';}document.documentElement.setAttribute('data-theme',t);}catch(e){document.documentElement.setAttribute('data-theme','light');}})();</script>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Sir Joshua — Kursus IELTS & Bahasa Inggris | Trial Gratis</title>
+<script src="https://cdn.jsdelivr.net/npm/tailwindcss-cdn@@3.4.10/tailwindcss.js"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@@9..144,400;9..144,500;9..144,600;9..144,700&family=Plus+Jakarta+Sans:wght@@400;500;600;700&family=JetBrains+Mono:wght@@400;500&display=swap" rel="stylesheet">
+<script>
+  tailwind.config = {
+    theme: {
+      extend: {
+        colors: {
+          ink:      'rgb(var(--c-ink) / <alpha-value>)',
+          surface:  'rgb(var(--c-surface) / <alpha-value>)',
+          card:     'rgb(var(--c-card) / <alpha-value>)',
+          paper:    'rgb(var(--c-paper) / <alpha-value>)',
+          parch:    'rgb(var(--c-parch) / <alpha-value>)',
+          cream:    'rgb(var(--c-surface) / <alpha-value>)',
+          line:     'rgb(var(--c-line) / <alpha-value>)',
+          teal:     { 50:'#E8F0EF', 100:'#C9DAD8', 500:'#1A5C5C', 600:'#0F3D3E', 700:'#0A2C2D', 800:'#06201F' },
+          terra:    { 400:'#E89679', 500:'#D97757', 600:'#C0603F', 700:'#9E4A2D' },
+          gold:     '#C8A24B',
+        },
+        fontFamily: {
+          serif: ['Fraunces', 'ui-serif', 'Georgia', 'serif'],
+          sans:  ['"Plus Jakarta Sans"', 'ui-sans-serif', 'system-ui', 'sans-serif'],
+          mono:  ['"JetBrains Mono"', 'ui-monospace', 'monospace'],
+        },
+      }
+    }
+  }
+</script>
+<style>
+  :root, [data-theme="light"] {
+    --c-surface: 250 246 238;   /* cream page */
+    --c-card:    255 255 255;   /* card / white */
+    --c-paper:   243 236 221;   /* subtle band */
+    --c-ink:      21  32  31;   /* primary text */
+    --c-parch:   250 246 238;   /* fixed light — text/elements on teal panels */
+    --c-line:    228 220 200;   /* hairline */
+    color-scheme: light;
+  }
+  [data-theme="dark"] {
+    --c-surface:  12  17  17;   /* near-black slate-teal page */
+    --c-card:     22  30  29;   /* elevated card */
+    --c-paper:    29  39  38;   /* subtle band */
+    --c-ink:     233 230 221;   /* light parchment text */
+    --c-parch:   250 246 238;   /* stays light on teal panels */
+    --c-line:     43  55  54;   /* hairline */
+    color-scheme: dark;
+  }
+  html, body { background: rgb(var(--c-surface)); color: rgb(var(--c-ink)); font-family: 'Plus Jakarta Sans', system-ui, sans-serif; transition: background-color .35s ease, color .35s ease; }
+  .font-display { font-family: 'Fraunces', Georgia, serif; font-optical-sizing: auto; font-variation-settings: "SOFT" 30, "WONK" 0; letter-spacing: -0.02em; }
+  .grain { background-image: radial-gradient(rgba(15,61,62,0.05) 1px, transparent 1px); background-size: 3px 3px; }
+  .hairline { border-color: rgb(var(--c-line)); }
+  .underline-hover { background-image: linear-gradient(currentColor, currentColor); background-size: 0% 1px; background-repeat: no-repeat; background-position: 0 100%; transition: background-size .3s ease; }
+  .underline-hover:hover { background-size: 100% 1px; }
+  .tick { width:12px; height:12px; }
+  .stripe-placeholder {
+    background-image: repeating-linear-gradient(135deg, #E4DCC8 0 8px, transparent 8px 16px);
+    background-color: #F3ECDD;
+  }
+  details > summary { list-style: none; cursor: pointer; }
+  details > summary::-webkit-details-marker { display: none; }
+  details[open] .faq-icon { transform: rotate(45deg); }
+  .faq-icon { transition: transform .25s ease; }
+  .pulse-wa::before {
+    content:''; position:absolute; inset:0; border-radius:9999px; background:#25D366; opacity:.55;
+    animation: wapulse 2.4s ease-out 3;
+  }
+  @@keyframes wapulse { 0%{transform:scale(1);opacity:.55} 100%{transform:scale(1.8);opacity:0} }
+  /* form focus */
+  input:focus, select:focus, textarea:focus { outline: none; box-shadow: 0 0 0 3px rgba(217,119,87,.25); border-color:#D97757 !important; }
+  /* horizontal scroll snap for stepper on mobile */
+  .snap-x-step { scroll-snap-type: x mandatory; }
+  .snap-x-step > * { scroll-snap-align: start; }
+  /* gentle lift */
+  .lift { transition: transform .25s ease, box-shadow .25s ease, border-color .25s ease; }
+  .lift:hover { transform: translateY(-2px); border-color:#0F3D3E; box-shadow: 0 12px 30px -16px rgba(15,61,62,.25); }
+  /* hide scrollbar */
+  .no-bar::-webkit-scrollbar{display:none} .no-bar{scrollbar-width:none}
+
+  /* ===== DARK THEME OVERRIDES ===== */
+  [data-theme="dark"] .grain { background-image: radial-gradient(rgba(255,255,255,0.035) 1px, transparent 1px); }
+  [data-theme="dark"] .stripe-placeholder { background-color:#1b2524; background-image: repeating-linear-gradient(135deg, rgba(255,255,255,.05) 0 8px, transparent 8px 16px); }
+  [data-theme="dark"] .bg-teal-50 { background-color: rgba(111,183,174,.14) !important; }
+  [data-theme="dark"] .bg-teal-50\/60 { background-color: rgba(111,183,174,.05) !important; }
+  [data-theme="dark"] .text-teal-700, [data-theme="dark"] .text-teal-600 { color:#6FB7AE !important; }
+  [data-theme="dark"] .lift:hover { border-color:#6FB7AE; box-shadow: 0 14px 34px -18px rgba(0,0,0,.65); }
+  /* card elevation in dark for the cream-on-teal cards that became surface */
+  [data-theme="dark"] input, [data-theme="dark"] select { color: rgb(var(--c-ink)); }
+  [data-theme="dark"] select option { background:#1b2524; color:#E9E6DD; }
+
+  /* ===== EBOOK STORE ===== */
+  .chip { transition: background-color .2s ease, color .2s ease, border-color .2s ease; }
+  .ebook-card .ebook-cover { transition: transform .3s ease; }
+  .ebook-card:hover .ebook-cover { transform: translateY(-4px) rotate(-.4deg); }
+  .ebook-cover { position:relative; aspect-ratio:3/4; border-radius:12px; overflow:hidden; display:flex; box-shadow:0 16px 36px -20px rgba(0,0,0,.55); }
+  .ebook-cover .inner { position:relative; z-index:2; display:flex; flex-direction:column; height:100%; width:100%; padding:20px 18px 18px 24px; }
+  .ebook-cover .spine { position:absolute; left:0; top:0; bottom:0; width:11px; background:linear-gradient(90deg, rgba(0,0,0,.32), rgba(0,0,0,0)); z-index:3; }
+  .ebook-cover .frame { position:absolute; inset:12px 12px 12px 18px; border:1px solid currentColor; opacity:.20; border-radius:5px; z-index:1; }
+  .ebook-cover::after { content:''; position:absolute; inset:0; z-index:1; background:linear-gradient(180deg, rgba(255,255,255,.08), transparent 40%, rgba(0,0,0,.30)); pointer-events:none; }
+  .ebook-cover .imprint { font-family:'JetBrains Mono',monospace; font-size:9.5px; letter-spacing:.24em; text-transform:uppercase; opacity:.7; }
+  .ebook-cover .series { font-family:'JetBrains Mono',monospace; font-size:10px; letter-spacing:.16em; text-transform:uppercase; opacity:.78; }
+  .ebook-cover .title { font-family:'Fraunces',serif; font-weight:600; letter-spacing:-0.02em; line-height:1.02; font-size:23px; margin-top:7px; text-wrap:balance; }
+  .ebook-cover .by { font-size:11.5px; opacity:.82; margin-top:9px; }
+  .ebook-cover .rule { height:1px; background:currentColor; opacity:.28; margin-bottom:9px; }
+  .cover-teal { background:#0F3D3E; color:#FAF6EE; }
+  .cover-deep { background:#0A2C2D; color:#FAF6EE; }
+  .cover-terra{ background:#BC5E3E; color:#FBEFE7; }
+  .cover-ink  { background:#1C2625; color:#F1EAD9; }
+  .cover-gold { background:#C8A24B; color:#241D08; }
+  .cover-sand { background:#E7DCC4; color:#173130; }
+  .cart-thumb { width:46px; height:61px; border-radius:6px; box-shadow:0 6px 14px -8px rgba(0,0,0,.5); flex:none; aspect-ratio:auto; }
+  .cart-thumb .frame { inset:5px; }
+  .qty-btn { width:26px; height:26px; display:flex; align-items:center; justify-content:center; border-radius:7px; font-size:15px; line-height:1; }
+
+  /* ===== CART DRAWER ===== */
+  .drawer-overlay { position:fixed; inset:0; background:rgba(6,10,10,.55); backdrop-filter:blur(2px); opacity:0; visibility:hidden; transition:opacity .3s ease; z-index:60; }
+  .drawer-overlay.open { opacity:1; visibility:visible; }
+  .cart-drawer { position:fixed; top:0; right:0; height:100%; width:min(440px,100vw); background:rgb(var(--c-surface)); border-left:1px solid rgb(var(--c-line)); transform:translateX(100%); transition:transform .38s cubic-bezier(.4,0,.2,1); z-index:61; display:flex; flex-direction:column; }
+  .cart-drawer.open { transform:translateX(0); }
+  .cart-badge { position:absolute; top:-5px; right:-5px; min-width:18px; height:18px; padding:0 4px; border-radius:9px; background:#D97757; color:#fff; font-size:11px; font-weight:700; display:flex; align-items:center; justify-content:center; line-height:1; }
+  .cart-badge.hide { display:none; }
+  .cartbtn-bump { animation: cartbump .4s ease; }
+  @@keyframes cartbump { 0%,100%{transform:scale(1)} 35%{transform:scale(1.18)} }
+  .pay-opt:has(input:checked) { border-color:#0F3D3E; background:rgb(var(--c-paper)); }
+  [data-theme="dark"] .pay-opt:has(input:checked) { border-color:#6FB7AE; }
+
+  /* ===== THEME TOGGLE ===== */
+  #themeToggle .icon-sun { display:none; }
+  #themeToggle .icon-moon { display:block; }
+  [data-theme="dark"] #themeToggle .icon-sun { display:block; }
+  [data-theme="dark"] #themeToggle .icon-moon { display:none; }
+</style>
+@if (Model.PayPalEnabled)
+{
+    <script src="https://www.paypal.com/sdk/js?client-id=@Model.PayPalClientId&currency=@Model.PayPalCurrency&intent=capture&components=buttons&disable-funding=credit"></script>
+}
+<script>
+  window.SJ_CONFIG = {
+    paypalEnabled: @(Model.PayPalEnabled ? "true" : "false"),
+    currency: '@Model.PayPalCurrency',
+    idrPerUsd: @Model.IdrPerUsd.ToString("0.####", inv),
+    promoCode: '@Model.PromoCode'
+  };
+</script>
+</head>
+<body class="antialiased">
+@Html.AntiForgeryToken()
+<!-- splash thumbnail removed for app build -->
+
+<!-- ============== TOP STRIP ============== -->
+<div class="hidden md:block bg-teal-700 text-parch/90 text-[13px]">
+  <div class="max-w-[1280px] mx-auto px-6 py-2 flex items-center justify-between">
+    <div class="flex items-center gap-6">
+      <span class="flex items-center gap-2"><span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span> Buka hari ini · 09.00–21.00 WIB</span>
+      <span class="opacity-70">Trial gratis 1 jam — tanpa biaya, tanpa keterikatan</span>
+    </div>
+    <div class="flex items-center gap-5">
+      <a href="tel:+622150999000" class="hover:text-white flex items-center gap-1.5"><svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg> (021) 5099-9000</a>
+      <a href="#" class="hover:text-white">Login Siswa</a>
+      <span class="text-parch/40">·</span>
+      <div id="langToggle" class="relative inline-flex items-center rounded-full bg-teal-800/60 border border-parch/20 p-0.5 select-none" role="group" aria-label="Pilih bahasa">
+        <span id="langThumb" class="absolute top-0.5 bottom-0.5 left-0.5 w-[34px] rounded-full bg-parch transition-transform duration-300 ease-out" style="transform:translateX(34px)"></span>
+        <button type="button" data-lang="en" class="lang-opt relative z-10 w-[34px] py-0.5 text-[12px] font-semibold rounded-full transition-colors text-parch/60">EN</button>
+        <button type="button" data-lang="id" class="lang-opt relative z-10 w-[34px] py-0.5 text-[12px] font-semibold rounded-full transition-colors text-teal-800">ID</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ============== HEADER ============== -->
+<header class="sticky top-0 z-40 bg-surface/85 backdrop-blur border-b hairline">
+  <div class="max-w-[1280px] mx-auto px-5 md:px-8 h-[68px] flex items-center justify-between">
+    <a href="#" class="flex items-center gap-2.5">
+      <img src="/uploads/sir-joshua-logo.png" alt="Sir Joshua Academy" class="h-10 w-auto object-contain">
+      <span class="font-display text-[20px] font-semibold tracking-tight leading-none">Sir Joshua<span class="text-terra-500">.</span></span>
+    </a>
+    <nav class="hidden lg:flex items-center gap-8 text-[15px] text-ink/80">
+      <a href="#programs" class="underline-hover">Programs</a>
+      <a href="#faculty" class="underline-hover">Pengajar</a>
+      <a href="#about" class="underline-hover">Tentang</a>
+      <a href="#locations" class="underline-hover">Lokasi</a>
+      <a href="#ebooks" class="underline-hover">Ebook</a>
+      <a href="#faq" class="underline-hover">FAQ</a>
+    </nav>
+    <div class="flex items-center gap-2 md:gap-3">
+      <a href="tel:+622150999000" class="hidden md:flex items-center gap-2 text-[14px] text-teal-700 font-semibold hover:text-terra-600">
+        <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+        (021) 5099-9000
+      </a>
+      <button id="themeToggle" type="button" aria-label="Ganti tema terang / gelap" title="Ganti tema" class="w-10 h-10 rounded-full border hairline bg-card flex items-center justify-center text-ink/70 hover:text-ink hover:border-teal-600 transition">
+        <svg class="icon-moon w-[18px] h-[18px]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+        <svg class="icon-sun w-[18px] h-[18px]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="4.2"/><path d="M12 2v2.2M12 19.8V22M4.6 4.6l1.6 1.6M17.8 17.8l1.6 1.6M2 12h2.2M19.8 12H22M4.6 19.4l1.6-1.6M17.8 6.2l1.6-1.6"/></svg>
+      </button>
+      <button id="cartBtn" type="button" aria-label="Buka keranjang" class="relative w-10 h-10 rounded-full border hairline bg-card flex items-center justify-center text-ink/70 hover:text-ink hover:border-teal-600 transition">
+        <svg class="w-[19px] h-[19px]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3h2l.5 2.5M6 6h14.5l-1.6 8H8.1L6 6z"/><path d="M5.5 5.5 8.1 14"/><circle cx="9.5" cy="19" r="1.4"/><circle cx="17" cy="19" r="1.4"/></svg>
+        <span id="cartBadge" class="cart-badge hide">0</span>
+      </button>
+      <a href="#trial" class="hidden sm:inline-flex px-4 py-2.5 rounded-full bg-terra-500 text-white text-[14px] font-semibold hover:bg-terra-600 transition shadow-[0_6px_18px_-8px_rgba(217,119,87,.7)]">Daftar Trial Gratis</a>
+    </div>
+  </div>
+</header>
+
+<!-- ============== HERO ============== -->
+<section class="relative overflow-hidden">
+  <!-- backdrop -->
+  <div class="absolute inset-0 -z-10">
+    <div class="absolute inset-0 bg-surface"></div>
+    <div class="absolute -top-40 -left-40 w-[640px] h-[640px] rounded-full bg-teal-50/60 blur-2xl"></div>
+    <div class="absolute -bottom-40 -right-20 w-[520px] h-[520px] rounded-full bg-terra-400/15 blur-2xl"></div>
+    <div class="absolute inset-0 grain opacity-60"></div>
+  </div>
+
+  <div class="max-w-[1280px] mx-auto px-5 md:px-8 pt-12 md:pt-20 pb-16 md:pb-24 grid lg:grid-cols-12 gap-10 lg:gap-12 items-center">
+    <!-- Left: copy -->
+    <div class="lg:col-span-7">
+      <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-teal-50 text-teal-700 text-[12.5px] font-medium tracking-wide">
+        <span class="w-1.5 h-1.5 rounded-full bg-terra-500"></span>
+        Intake Mei–Juni 2026 · Slot terbatas
+      </div>
+      <h1 class="mt-5 font-display font-medium leading-[0.95] text-ink text-[44px] sm:text-[56px] lg:text-[72px]">
+        Capai <em class="not-italic text-terra-600 font-display">band&nbsp;7+</em><br/>
+        untuk <span class="italic font-light">kuliah,</span> <span class="italic font-light">kerja,</span><br/>
+        atau imigrasi ke luar negeri.
+      </h1>
+      <p class="mt-6 text-[17px] md:text-[18px] leading-relaxed text-ink/70 max-w-[560px]">
+        Pengajar bersertifikat CELTA &amp; TESOL, kelas maksimal 1:8, dan mock test mingguan dengan format ujian asli — supaya kamu masuk hari ujian dengan tenang, bukan tebak-tebakan.
+      </p>
+
+      <div class="mt-8 flex flex-wrap items-center gap-3">
+        <a href="#trial" class="group inline-flex items-center gap-2 px-6 py-3.5 rounded-full bg-teal-600 text-parch font-semibold hover:bg-teal-700 transition">
+          Daftar Trial Gratis
+          <svg class="w-4 h-4 transition-transform group-hover:translate-x-0.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M5 12h14M13 5l7 7-7 7"/></svg>
+        </a>
+        <a href="#programs" class="inline-flex items-center gap-2 px-6 py-3.5 rounded-full border hairline bg-card/60 hover:bg-card text-ink font-semibold transition">Lihat Program</a>
+      </div>
+      <p class="mt-3 text-[13px] text-ink/55">1 jam · tanpa biaya · tanpa keterikatan. Kami WA dalam 30 menit di jam kerja.</p>
+
+      <!-- trust strip -->
+      <div class="mt-10 grid grid-cols-2 sm:grid-cols-4 gap-y-5 gap-x-6 max-w-[640px]">
+        <div>
+          <div class="font-display text-[28px] font-semibold leading-none text-teal-700">2.400<span class="text-terra-500">+</span></div>
+          <div class="mt-1 text-[12.5px] text-ink/60 leading-snug">siswa lulus<br/>band 7 atau lebih</div>
+        </div>
+        <div>
+          <div class="font-display text-[28px] font-semibold leading-none text-teal-700">93<span class="text-terra-500">%</span></div>
+          <div class="mt-1 text-[12.5px] text-ink/60 leading-snug">capai target<br/>di percobaan ke-1/2</div>
+        </div>
+        <div>
+          <div class="font-display text-[28px] font-semibold leading-none text-teal-700">1:8</div>
+          <div class="mt-1 text-[12.5px] text-ink/60 leading-snug">rasio guru<br/>per kelas, maks.</div>
+        </div>
+        <div>
+          <div class="font-display text-[28px] font-semibold leading-none text-teal-700">10<span class="text-terra-500">th</span></div>
+          <div class="mt-1 text-[12.5px] text-ink/60 leading-snug">mengajar<br/>IELTS / TOEFL / PTE</div>
+        </div>
+      </div>
+
+      <div class="mt-8 flex flex-wrap items-center gap-x-6 gap-y-2 text-[12.5px] text-ink/55">
+        <span class="font-mono uppercase tracking-wider">Partner resmi —</span>
+        <span class="font-display text-[15px] text-ink/75">British Council</span>
+        <span class="text-line">·</span>
+        <span class="font-display text-[15px] text-ink/75">IDP Education</span>
+        <span class="text-line">·</span>
+        <span class="font-display text-[15px] text-ink/75">Cambridge English</span>
+      </div>
+    </div>
+
+    <!-- Right: form card -->
+    <div class="lg:col-span-5" id="trial">
+      <div class="relative">
+        <!-- decorative ticket stub -->
+        <div class="absolute -top-3 -left-3 hidden md:block font-mono text-[11px] tracking-widest text-terra-600 rotate-[-4deg] bg-surface px-2 py-1 border hairline rounded">FREE · 60 MIN</div>
+
+        <form class="relative bg-card rounded-[20px] border hairline p-6 md:p-7 shadow-[0_30px_80px_-40px_rgba(15,61,62,.35)]">
+          <div class="flex items-baseline justify-between">
+            <h3 class="font-display text-[26px] font-semibold leading-tight">Book a free demo</h3>
+            <span class="text-[12px] text-ink/55">Step 1 / 1</span>
+          </div>
+          <p class="mt-1 text-[13.5px] text-ink/60">Isi sebentar — kami WA dalam 30 menit.</p>
+
+          <div class="mt-5 grid gap-3.5">
+            <label class="block">
+              <span class="block text-[12.5px] font-medium text-ink/75 mb-1">Nama lengkap</span>
+              <input type="text" placeholder="cth. Putri Ramadhani" class="w-full px-3.5 py-3 rounded-lg border hairline bg-surface/40 text-[15px] placeholder-ink/35"/>
+            </label>
+            <label class="block">
+              <span class="block text-[12.5px] font-medium text-ink/75 mb-1">Nomor HP / WhatsApp</span>
+              <div class="flex">
+                <span class="px-3 py-3 rounded-l-lg border hairline border-r-0 bg-paper text-[15px] text-ink/70 font-medium">+62</span>
+                <input type="tel" placeholder="812-3456-7890" class="flex-1 px-3.5 py-3 rounded-r-lg border hairline bg-surface/40 text-[15px] placeholder-ink/35"/>
+              </div>
+            </label>
+            <div class="grid grid-cols-2 gap-3">
+              <label class="block">
+                <span class="block text-[12.5px] font-medium text-ink/75 mb-1">Program</span>
+                <select class="w-full px-3.5 py-3 rounded-lg border hairline bg-surface/40 text-[15px]">
+                  <option>IELTS Academic</option>
+                  <option>IELTS General</option>
+                  <option>TOEFL iBT</option>
+                  <option>PTE Academic</option>
+                  <option>Business English</option>
+                  <option>Belum yakin — bantu pilih</option>
+                </select>
+              </label>
+              <label class="block">
+                <span class="block text-[12.5px] font-medium text-ink/75 mb-1">Cabang / Kota</span>
+                <select class="w-full px-3.5 py-3 rounded-lg border hairline bg-surface/40 text-[15px]">
+                  <option>Jakarta — Kemang</option>
+                  <option>Jakarta — Kelapa Gading</option>
+                  <option>Bandung — Dago</option>
+                  <option>Surabaya — Pakuwon</option>
+                  <option>Online (Zoom)</option>
+                </select>
+              </label>
+            </div>
+
+            <label class="flex items-start gap-2.5 mt-1 text-[12.5px] text-ink/65 leading-snug">
+              <input type="checkbox" class="mt-0.5 accent-teal-600 w-4 h-4"/>
+              <span>Saya setuju dihubungi terkait pendaftaran ini. We don't spam — kamu bisa unsubscribe kapan saja.</span>
+            </label>
+
+            <button type="button" class="mt-2 w-full px-5 py-3.5 rounded-lg bg-terra-500 text-white font-semibold text-[15px] hover:bg-terra-600 transition shadow-[0_10px_24px_-12px_rgba(217,119,87,.85)]">
+              Book free demo →
+            </button>
+            <p class="text-center text-[12px] text-ink/55">Atau langsung WhatsApp <a href="#" class="text-teal-700 font-semibold underline-hover">+62&nbsp;812-1500-9000</a></p>
+          </div>
+        </form>
+
+        <!-- micro-card behind -->
+        <div class="absolute -bottom-5 -right-3 hidden md:flex items-center gap-2.5 bg-teal-700 text-parch rounded-full pl-2 pr-4 py-2 shadow-lg">
+          <div class="flex -space-x-1.5">
+            <span class="w-6 h-6 rounded-full bg-terra-400 border-2 border-teal-700"></span>
+            <span class="w-6 h-6 rounded-full bg-parch border-2 border-teal-700"></span>
+            <span class="w-6 h-6 rounded-full bg-gold border-2 border-teal-700"></span>
+          </div>
+          <span class="text-[12.5px]">42 siswa daftar minggu ini</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============== PARTNER LOGO STRIP ============== -->
+<section class="border-y hairline bg-paper/50">
+  <div class="max-w-[1280px] mx-auto px-5 md:px-8 py-7 flex flex-wrap items-center justify-center md:justify-between gap-x-10 gap-y-4">
+    <span class="font-mono uppercase tracking-[0.18em] text-[11.5px] text-ink/50">Trusted by &amp; partner with</span>
+    <div class="flex flex-wrap items-center gap-x-9 gap-y-3 text-ink/55">
+      <span class="font-display text-[19px] tracking-tight">British&nbsp;Council</span>
+      <span class="font-serif italic text-[18px]">IDP Education</span>
+      <span class="font-display text-[19px] font-semibold">Cambridge</span>
+      <span class="font-mono text-[14px] tracking-widest">ETS · TOEFL</span>
+      <span class="font-display italic text-[18px]">Pearson PTE</span>
+    </div>
+  </div>
+</section>
+
+<!-- ============== KENAPA PILIH ============== -->
+<section class="py-20 md:py-28">
+  <div class="max-w-[1280px] mx-auto px-5 md:px-8">
+    <div class="grid md:grid-cols-12 gap-8 items-end mb-12">
+      <div class="md:col-span-7">
+        <div class="font-mono uppercase tracking-[0.18em] text-[11.5px] text-terra-600">— Kenapa pilih Sir Joshua</div>
+        <h2 class="mt-3 font-display text-[40px] md:text-[52px] font-medium leading-[1.02]">
+          Bukan bimbel besar.<br/>Studio kecil yang serius soal <em class="not-italic text-terra-600">band score</em>.
+        </h2>
+      </div>
+      <p class="md:col-span-5 text-[16px] text-ink/65 leading-relaxed">
+        Kami tidak menjual janji palsu — kami menjual jam terbang, koreksi mendalam, dan kelas yang cukup kecil sehingga setiap siswa benar-benar bicara setiap sesi.
+      </p>
+    </div>
+
+    <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
+      <!-- card -->
+      <div class="lift bg-card border hairline rounded-2xl p-6 flex flex-col">
+        <div class="font-display text-[44px] font-semibold text-teal-600 leading-none">01</div>
+        <h3 class="mt-6 font-display text-[22px] font-semibold leading-tight">Kelas kecil 1:8</h3>
+        <p class="mt-2 text-[14.5px] text-ink/65 leading-relaxed">Maksimal 8 siswa. Banyak waktu speaking dan koreksi langsung — bukan kuliah satu arah.</p>
+        <div class="mt-5 pt-5 border-t hairline flex items-center gap-2 text-[12.5px] text-ink/55">
+          <span class="w-1.5 h-1.5 rounded-full bg-terra-500"></span> Rata-rata 5 siswa per kelas
+        </div>
+      </div>
+      <div class="lift bg-card border hairline rounded-2xl p-6 flex flex-col">
+        <div class="font-display text-[44px] font-semibold text-teal-600 leading-none">02</div>
+        <h3 class="mt-6 font-display text-[22px] font-semibold leading-tight">Pengajar bersertifikat</h3>
+        <p class="mt-2 text-[14.5px] text-ink/65 leading-relaxed">CELTA / TESOL trained dengan jam terbang IELTS, TOEFL, PTE — lokal dan native speaker.</p>
+        <div class="mt-5 pt-5 border-t hairline flex items-center gap-2 text-[12.5px] text-ink/55">
+          <span class="w-1.5 h-1.5 rounded-full bg-terra-500"></span> Setiap pengajar diaudit per term
+        </div>
+      </div>
+      <div class="lift bg-card border hairline rounded-2xl p-6 flex flex-col">
+        <div class="font-display text-[44px] font-semibold text-teal-600 leading-none">03</div>
+        <h3 class="mt-6 font-display text-[22px] font-semibold leading-tight">Mock test mingguan</h3>
+        <p class="mt-2 text-[14.5px] text-ink/65 leading-relaxed">Format ujian asli — Listening, Reading, Writing, Speaking. Plus feedback tertulis.</p>
+        <div class="mt-5 pt-5 border-t hairline flex items-center gap-2 text-[12.5px] text-ink/55">
+          <span class="w-1.5 h-1.5 rounded-full bg-terra-500"></span> Setiap Sabtu, 09.00–13.00
+        </div>
+      </div>
+      <div class="lift bg-teal-700 text-parch rounded-2xl p-6 flex flex-col">
+        <div class="font-display text-[44px] font-semibold text-terra-400 leading-none">04</div>
+        <h3 class="mt-6 font-display text-[22px] font-semibold leading-tight">Path study-abroad</h3>
+        <p class="mt-2 text-[14.5px] text-parch/75 leading-relaxed">Setelah lulus IELTS, kami bantu pemilihan kampus, esai, dan konsultasi visa.</p>
+        <div class="mt-5 pt-5 border-t border-parch/15 flex items-center gap-2 text-[12.5px] text-parch/65">
+          <span class="w-1.5 h-1.5 rounded-full bg-terra-400"></span> Termasuk untuk siswa Sir Joshua
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============== PROGRAMS ============== -->
+<section id="programs" class="py-20 md:py-28 bg-paper/40 border-y hairline">
+  <div class="max-w-[1280px] mx-auto px-5 md:px-8">
+    <div class="flex items-end justify-between gap-6 mb-10 flex-wrap">
+      <div>
+        <div class="font-mono uppercase tracking-[0.18em] text-[11.5px] text-terra-600">— Program kami</div>
+        <h2 class="mt-3 font-display text-[40px] md:text-[52px] font-medium leading-[1.02]">Pilih jalur sesuai tujuanmu.</h2>
+      </div>
+      <a href="#" class="text-[14px] text-teal-700 font-semibold underline-hover">Bandingkan semua program →</a>
+    </div>
+
+    <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
+      <!-- 1 IELTS Academic -->
+      <article class="lift group bg-card border hairline rounded-2xl p-6 flex flex-col relative overflow-hidden">
+        <div class="absolute top-5 right-5 px-2 py-0.5 rounded-full bg-terra-50 text-terra-700 text-[11px] font-semibold tracking-wide" style="background:#FBE7DD">Paling populer</div>
+        <span class="font-mono text-[11px] tracking-widest uppercase text-ink/50">kuliah</span>
+        <h3 class="mt-3 font-display text-[26px] font-semibold leading-tight">IELTS Academic</h3>
+        <p class="mt-2 text-[14.5px] text-ink/65">Untuk masuk universitas di Australia, UK, Kanada, NZ, US.</p>
+        <dl class="mt-6 grid grid-cols-2 gap-y-3 gap-x-4 text-[13px]">
+          <dt class="text-ink/50">Target band</dt><dd class="text-right font-semibold">6.5 – 8.0</dd>
+          <dt class="text-ink/50">Durasi</dt><dd class="text-right font-semibold">8 / 12 / 16 minggu</dd>
+          <dt class="text-ink/50">Format</dt><dd class="text-right font-semibold">Hybrid · maks 1:8</dd>
+        </dl>
+        <div class="mt-6 pt-6 border-t hairline flex items-end justify-between">
+          <div>
+            <div class="text-[11.5px] text-ink/55">Mulai dari</div>
+            <div class="font-display text-[24px] font-semibold leading-none">Rp&nbsp;1.850k<span class="text-[14px] text-ink/55 font-sans font-normal">/bln</span></div>
+            <div class="text-[11.5px] text-ink/55 mt-1">Cicilan 0% · 6 bulan</div>
+          </div>
+          <a href="#" class="inline-flex items-center gap-1 text-teal-700 font-semibold text-[14px] group-hover:gap-2 transition-all">Lihat detail →</a>
+        </div>
+      </article>
+
+      <!-- 2 IELTS General -->
+      <article class="lift group bg-card border hairline rounded-2xl p-6 flex flex-col">
+        <span class="font-mono text-[11px] tracking-widest uppercase text-ink/50">kerja · imigrasi</span>
+        <h3 class="mt-3 font-display text-[26px] font-semibold leading-tight">IELTS General</h3>
+        <p class="mt-2 text-[14.5px] text-ink/65">Untuk PR, working visa, dan training di luar negeri.</p>
+        <dl class="mt-6 grid grid-cols-2 gap-y-3 gap-x-4 text-[13px]">
+          <dt class="text-ink/50">Target band</dt><dd class="text-right font-semibold">6.0 – 8.0</dd>
+          <dt class="text-ink/50">Durasi</dt><dd class="text-right font-semibold">8 / 12 minggu</dd>
+          <dt class="text-ink/50">Format</dt><dd class="text-right font-semibold">Hybrid · maks 1:8</dd>
+        </dl>
+        <div class="mt-6 pt-6 border-t hairline flex items-end justify-between">
+          <div>
+            <div class="text-[11.5px] text-ink/55">Mulai dari</div>
+            <div class="font-display text-[24px] font-semibold leading-none">Rp&nbsp;1.650k<span class="text-[14px] text-ink/55 font-sans font-normal">/bln</span></div>
+            <div class="text-[11.5px] text-ink/55 mt-1">Cicilan 0% · 6 bulan</div>
+          </div>
+          <a href="#" class="inline-flex items-center gap-1 text-teal-700 font-semibold text-[14px] group-hover:gap-2 transition-all">Lihat detail →</a>
+        </div>
+      </article>
+
+      <!-- 3 TOEFL iBT -->
+      <article class="lift group bg-card border hairline rounded-2xl p-6 flex flex-col">
+        <span class="font-mono text-[11px] tracking-widest uppercase text-ink/50">kuliah US · kerja</span>
+        <h3 class="mt-3 font-display text-[26px] font-semibold leading-tight">TOEFL iBT</h3>
+        <p class="mt-2 text-[14.5px] text-ink/65">Computer-based, integrated skills — favorit untuk universitas US.</p>
+        <dl class="mt-6 grid grid-cols-2 gap-y-3 gap-x-4 text-[13px]">
+          <dt class="text-ink/50">Target skor</dt><dd class="text-right font-semibold">90 – 110</dd>
+          <dt class="text-ink/50">Durasi</dt><dd class="text-right font-semibold">10 / 14 minggu</dd>
+          <dt class="text-ink/50">Format</dt><dd class="text-right font-semibold">Online / hybrid</dd>
+        </dl>
+        <div class="mt-6 pt-6 border-t hairline flex items-end justify-between">
+          <div>
+            <div class="text-[11.5px] text-ink/55">Mulai dari</div>
+            <div class="font-display text-[24px] font-semibold leading-none">Rp&nbsp;1.950k<span class="text-[14px] text-ink/55 font-sans font-normal">/bln</span></div>
+            <div class="text-[11.5px] text-ink/55 mt-1">Cicilan 0% · 6 bulan</div>
+          </div>
+          <a href="#" class="inline-flex items-center gap-1 text-teal-700 font-semibold text-[14px] group-hover:gap-2 transition-all">Lihat detail →</a>
+        </div>
+      </article>
+
+      <!-- 4 PTE -->
+      <article class="lift group bg-card border hairline rounded-2xl p-6 flex flex-col">
+        <span class="font-mono text-[11px] tracking-widest uppercase text-ink/50">cepat · australia/nz</span>
+        <h3 class="mt-3 font-display text-[26px] font-semibold leading-tight">PTE Academic</h3>
+        <p class="mt-2 text-[14.5px] text-ink/65">Hasil cepat (48 jam), AI scoring — pilihan untuk applicant Australia / NZ.</p>
+        <dl class="mt-6 grid grid-cols-2 gap-y-3 gap-x-4 text-[13px]">
+          <dt class="text-ink/50">Target skor</dt><dd class="text-right font-semibold">65 – 85</dd>
+          <dt class="text-ink/50">Durasi</dt><dd class="text-right font-semibold">6 / 10 minggu</dd>
+          <dt class="text-ink/50">Format</dt><dd class="text-right font-semibold">Online / hybrid</dd>
+        </dl>
+        <div class="mt-6 pt-6 border-t hairline flex items-end justify-between">
+          <div>
+            <div class="text-[11.5px] text-ink/55">Mulai dari</div>
+            <div class="font-display text-[24px] font-semibold leading-none">Rp&nbsp;1.750k<span class="text-[14px] text-ink/55 font-sans font-normal">/bln</span></div>
+            <div class="text-[11.5px] text-ink/55 mt-1">Cicilan 0% · 6 bulan</div>
+          </div>
+          <a href="#" class="inline-flex items-center gap-1 text-teal-700 font-semibold text-[14px] group-hover:gap-2 transition-all">Lihat detail →</a>
+        </div>
+      </article>
+
+      <!-- 5 Business English -->
+      <article class="lift group bg-card border hairline rounded-2xl p-6 flex flex-col">
+        <span class="font-mono text-[11px] tracking-widest uppercase text-ink/50">karir · profesional</span>
+        <h3 class="mt-3 font-display text-[26px] font-semibold leading-tight">Business English</h3>
+        <p class="mt-2 text-[14.5px] text-ink/65">Meeting, negotiation, email & presentation untuk profesional Indonesia.</p>
+        <dl class="mt-6 grid grid-cols-2 gap-y-3 gap-x-4 text-[13px]">
+          <dt class="text-ink/50">Level</dt><dd class="text-right font-semibold">B1 → C1 (CEFR)</dd>
+          <dt class="text-ink/50">Durasi</dt><dd class="text-right font-semibold">12 minggu (rolling)</dd>
+          <dt class="text-ink/50">Format</dt><dd class="text-right font-semibold">Evening · maks 1:6</dd>
+        </dl>
+        <div class="mt-6 pt-6 border-t hairline flex items-end justify-between">
+          <div>
+            <div class="text-[11.5px] text-ink/55">Mulai dari</div>
+            <div class="font-display text-[24px] font-semibold leading-none">Rp&nbsp;1.450k<span class="text-[14px] text-ink/55 font-sans font-normal">/bln</span></div>
+            <div class="text-[11.5px] text-ink/55 mt-1">Cicilan 0% · 6 bulan</div>
+          </div>
+          <a href="#" class="inline-flex items-center gap-1 text-teal-700 font-semibold text-[14px] group-hover:gap-2 transition-all">Lihat detail →</a>
+        </div>
+      </article>
+
+      <!-- 6 helper card "tidak yakin" -->
+      <article class="bg-teal-700 text-parch rounded-2xl p-6 flex flex-col justify-between">
+        <div>
+          <div class="font-mono text-[11px] tracking-widest uppercase text-terra-400">→ tidak yakin?</div>
+          <h3 class="mt-3 font-display text-[26px] font-semibold leading-tight">Tes diagnostik gratis, 30 menit.</h3>
+          <p class="mt-3 text-[14.5px] text-parch/75">Kami pahami level kamu sekarang dulu — baru rekomendasikan program dan timeline yang realistis.</p>
+        </div>
+        <a href="#trial" class="mt-6 inline-flex items-center justify-between gap-3 px-5 py-3 rounded-full bg-parch text-teal-800 font-semibold text-[14px] hover:bg-white transition">
+          Mulai tes diagnostik
+          <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M5 12h14M13 5l7 7-7 7"/></svg>
+        </a>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- ============== METHODOLOGY ============== -->
+<section class="py-20 md:py-28">
+  <div class="max-w-[1280px] mx-auto px-5 md:px-8">
+    <div class="grid md:grid-cols-12 gap-8 mb-14">
+      <div class="md:col-span-6">
+        <div class="font-mono uppercase tracking-[0.18em] text-[11.5px] text-terra-600">— Cara kami mengajar</div>
+        <h2 class="mt-3 font-display text-[40px] md:text-[52px] font-medium leading-[1.02]">Lima langkah,<br/>tanpa <em class="not-italic text-terra-600">drama</em>.</h2>
+      </div>
+      <p class="md:col-span-6 self-end text-[16px] text-ink/65 leading-relaxed max-w-[520px]">
+        Setiap siswa Sir Joshua melewati lima tahap yang sama — dari diagnosa awal sampai bantuan booking ujian dan pendaftaran kampus.
+      </p>
+    </div>
+
+    <!-- Stepper desktop / horizontal scroll mobile -->
+    <ol class="grid lg:grid-cols-5 gap-px bg-line border hairline rounded-2xl overflow-hidden">
+      <!-- step -->
+      <li class="bg-surface p-6 lg:p-7 flex flex-col">
+        <div class="flex items-baseline justify-between">
+          <span class="font-display text-[68px] leading-none font-semibold text-terra-500">1</span>
+          <span class="font-mono text-[11px] tracking-widest text-ink/40">DAY 0</span>
+        </div>
+        <h3 class="mt-6 font-display text-[20px] font-semibold leading-tight">Tes diagnostik gratis</h3>
+        <p class="mt-2 text-[14px] text-ink/65 leading-relaxed">Speaking, listening, reading, writing — supaya kami tahu titik mulaimu.</p>
+      </li>
+      <li class="bg-surface p-6 lg:p-7 flex flex-col">
+        <div class="flex items-baseline justify-between">
+          <span class="font-display text-[68px] leading-none font-semibold text-terra-500">2</span>
+          <span class="font-mono text-[11px] tracking-widest text-ink/40">WEEK 1</span>
+        </div>
+        <h3 class="mt-6 font-display text-[20px] font-semibold leading-tight">Rencana belajar personal</h3>
+        <p class="mt-2 text-[14px] text-ink/65 leading-relaxed">Target band, jadwal, dan timeline yang realistis berdasarkan ujian kamu.</p>
+      </li>
+      <li class="bg-surface p-6 lg:p-7 flex flex-col">
+        <div class="flex items-baseline justify-between">
+          <span class="font-display text-[68px] leading-none font-semibold text-terra-500">3</span>
+          <span class="font-mono text-[11px] tracking-widest text-ink/40">WEEK 2–10</span>
+        </div>
+        <h3 class="mt-6 font-display text-[20px] font-semibold leading-tight">Kelas + speaking 1-on-1</h3>
+        <p class="mt-2 text-[14px] text-ink/65 leading-relaxed">Kelas struktural plus sesi speaking mingguan dengan koreksi langsung.</p>
+      </li>
+      <li class="bg-surface p-6 lg:p-7 flex flex-col">
+        <div class="flex items-baseline justify-between">
+          <span class="font-display text-[68px] leading-none font-semibold text-terra-500">4</span>
+          <span class="font-mono text-[11px] tracking-widest text-ink/40">EVERY SAT</span>
+        </div>
+        <h3 class="mt-6 font-display text-[20px] font-semibold leading-tight">Mock test + feedback</h3>
+        <p class="mt-2 text-[14px] text-ink/65 leading-relaxed">Format IELTS asli plus feedback tertulis dari examiner-style rater.</p>
+      </li>
+      <li class="bg-teal-700 text-parch p-6 lg:p-7 flex flex-col">
+        <div class="flex items-baseline justify-between">
+          <span class="font-display text-[68px] leading-none font-semibold text-terra-400">5</span>
+          <span class="font-mono text-[11px] tracking-widest text-parch/50">EXAM DAY+</span>
+        </div>
+        <h3 class="mt-6 font-display text-[20px] font-semibold leading-tight">Booking ujian + visa</h3>
+        <p class="mt-2 text-[14px] text-parch/75 leading-relaxed">Bantu booking British Council / IDP, plus konsultasi kampus dan visa.</p>
+      </li>
+    </ol>
+  </div>
+</section>
+
+<!-- ============== FACULTY ============== -->
+<section id="faculty" class="py-20 md:py-28 bg-paper/40 border-y hairline">
+  <div class="max-w-[1280px] mx-auto px-5 md:px-8">
+    <div class="flex items-end justify-between flex-wrap gap-6 mb-10">
+      <div>
+        <div class="font-mono uppercase tracking-[0.18em] text-[11.5px] text-terra-600">— Pengajar kami</div>
+        <h2 class="mt-3 font-display text-[40px] md:text-[52px] font-medium leading-[1.02]">Tim yang sudah <em class="not-italic text-terra-600">duduk di kursi ujian</em> sebanyak kamu akan duduk.</h2>
+      </div>
+      <a href="#" class="text-[14px] text-teal-700 font-semibold underline-hover">Lihat semua pengajar →</a>
+    </div>
+
+    <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
+      <!-- teacher card -->
+      <article class="bg-card border hairline rounded-2xl overflow-hidden flex flex-col lift">
+        <div class="aspect-[4/5] stripe-placeholder relative">
+          <span class="absolute bottom-3 left-3 font-mono text-[10px] tracking-widest uppercase text-ink/55 bg-surface/80 px-2 py-0.5 rounded">photo · pak adit</span>
+          <span class="absolute top-3 right-3 px-2 py-0.5 bg-card/90 rounded-full text-[11px] font-semibold text-teal-700">8.5 IELTS</span>
+        </div>
+        <div class="p-5">
+          <h3 class="font-display text-[20px] font-semibold leading-tight">Aditya Pranata</h3>
+          <p class="text-[13px] text-ink/55 mt-0.5">Lead Trainer · Speaking &amp; Writing</p>
+          <div class="mt-3 flex flex-wrap gap-1.5">
+            <span class="px-2 py-0.5 rounded-full bg-teal-50 text-teal-700 text-[11px] font-medium">CELTA</span>
+            <span class="px-2 py-0.5 rounded-full bg-teal-50 text-teal-700 text-[11px] font-medium">DELTA M2</span>
+            <span class="px-2 py-0.5 rounded-full bg-paper text-ink/65 text-[11px] font-medium">9 thn</span>
+          </div>
+        </div>
+      </article>
+
+      <article class="bg-card border hairline rounded-2xl overflow-hidden flex flex-col lift">
+        <div class="aspect-[4/5] stripe-placeholder relative">
+          <span class="absolute bottom-3 left-3 font-mono text-[10px] tracking-widest uppercase text-ink/55 bg-surface/80 px-2 py-0.5 rounded">photo · ms. sarah</span>
+          <span class="absolute top-3 right-3 px-2 py-0.5 bg-card/90 rounded-full text-[11px] font-semibold text-teal-700">9.0 IELTS</span>
+        </div>
+        <div class="p-5">
+          <h3 class="font-display text-[20px] font-semibold leading-tight">Sarah Whitmore</h3>
+          <p class="text-[13px] text-ink/55 mt-0.5">Native (UK) · Writing &amp; Test Strategy</p>
+          <div class="mt-3 flex flex-wrap gap-1.5">
+            <span class="px-2 py-0.5 rounded-full bg-teal-50 text-teal-700 text-[11px] font-medium">CELTA</span>
+            <span class="px-2 py-0.5 rounded-full bg-teal-50 text-teal-700 text-[11px] font-medium">Cambridge TKT</span>
+            <span class="px-2 py-0.5 rounded-full bg-paper text-ink/65 text-[11px] font-medium">12 thn</span>
+          </div>
+        </div>
+      </article>
+
+      <article class="bg-card border hairline rounded-2xl overflow-hidden flex flex-col lift">
+        <div class="aspect-[4/5] stripe-placeholder relative">
+          <span class="absolute bottom-3 left-3 font-mono text-[10px] tracking-widest uppercase text-ink/55 bg-surface/80 px-2 py-0.5 rounded">photo · bu maya</span>
+          <span class="absolute top-3 right-3 px-2 py-0.5 bg-card/90 rounded-full text-[11px] font-semibold text-teal-700">8.0 IELTS</span>
+        </div>
+        <div class="p-5">
+          <h3 class="font-display text-[20px] font-semibold leading-tight">Maya Setiawan</h3>
+          <p class="text-[13px] text-ink/55 mt-0.5">Trainer · Listening &amp; Reading</p>
+          <div class="mt-3 flex flex-wrap gap-1.5">
+            <span class="px-2 py-0.5 rounded-full bg-teal-50 text-teal-700 text-[11px] font-medium">TESOL</span>
+            <span class="px-2 py-0.5 rounded-full bg-teal-50 text-teal-700 text-[11px] font-medium">PTE Expert</span>
+            <span class="px-2 py-0.5 rounded-full bg-paper text-ink/65 text-[11px] font-medium">7 thn</span>
+          </div>
+        </div>
+      </article>
+
+      <article class="bg-card border hairline rounded-2xl overflow-hidden flex flex-col lift">
+        <div class="aspect-[4/5] stripe-placeholder relative">
+          <span class="absolute bottom-3 left-3 font-mono text-[10px] tracking-widest uppercase text-ink/55 bg-surface/80 px-2 py-0.5 rounded">photo · mr. james</span>
+          <span class="absolute top-3 right-3 px-2 py-0.5 bg-card/90 rounded-full text-[11px] font-semibold text-teal-700">TOEFL 118</span>
+        </div>
+        <div class="p-5">
+          <h3 class="font-display text-[20px] font-semibold leading-tight">James O'Connor</h3>
+          <p class="text-[13px] text-ink/55 mt-0.5">Native (AU) · TOEFL &amp; Business English</p>
+          <div class="mt-3 flex flex-wrap gap-1.5">
+            <span class="px-2 py-0.5 rounded-full bg-teal-50 text-teal-700 text-[11px] font-medium">CELTA</span>
+            <span class="px-2 py-0.5 rounded-full bg-teal-50 text-teal-700 text-[11px] font-medium">MA TESOL</span>
+            <span class="px-2 py-0.5 rounded-full bg-paper text-ink/65 text-[11px] font-medium">14 thn</span>
+          </div>
+        </div>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- ============== STUDENT RESULTS ============== -->
+<section class="py-20 md:py-28">
+  <div class="max-w-[1280px] mx-auto px-5 md:px-8">
+    <div class="flex items-end justify-between flex-wrap gap-6 mb-10">
+      <div>
+        <div class="font-mono uppercase tracking-[0.18em] text-[11.5px] text-terra-600">— Hasil siswa kami</div>
+        <h2 class="mt-3 font-display text-[40px] md:text-[52px] font-medium leading-[1.02]">Hasil terbaru, <em class="not-italic text-terra-600">apa adanya</em>.</h2>
+      </div>
+      <div class="flex items-center gap-3">
+        <div class="font-mono text-[12px] text-ink/55 tracking-widest uppercase">Update bulan</div>
+        <div class="px-3 py-1.5 rounded-full bg-paper border hairline text-[13px] font-medium">April 2026</div>
+      </div>
+    </div>
+
+    <div class="grid md:grid-cols-3 gap-4">
+      <!-- result card -->
+      <article class="bg-card border hairline rounded-2xl p-6 flex flex-col lift">
+        <div class="flex items-center gap-3">
+          <div class="w-12 h-12 rounded-full stripe-placeholder"></div>
+          <div>
+            <div class="font-display text-[17px] font-semibold leading-tight">Putri Ramadhani</div>
+            <div class="text-[12.5px] text-ink/55">IELTS Academic · 14 minggu</div>
+          </div>
+        </div>
+        <div class="mt-6 flex items-end gap-2">
+          <span class="font-display text-[64px] leading-none font-semibold text-teal-700">7.5</span>
+          <span class="text-[12.5px] text-ink/55 mb-2">overall</span>
+        </div>
+        <div class="mt-4 grid grid-cols-4 gap-1.5 text-[11.5px]">
+          <div class="bg-paper rounded-md px-2 py-1.5 text-center"><div class="text-ink/50">L</div><div class="font-semibold">8.0</div></div>
+          <div class="bg-paper rounded-md px-2 py-1.5 text-center"><div class="text-ink/50">R</div><div class="font-semibold">7.5</div></div>
+          <div class="bg-paper rounded-md px-2 py-1.5 text-center"><div class="text-ink/50">W</div><div class="font-semibold">7.0</div></div>
+          <div class="bg-paper rounded-md px-2 py-1.5 text-center"><div class="text-ink/50">S</div><div class="font-semibold">7.5</div></div>
+        </div>
+        <div class="mt-5 pt-5 border-t hairline text-[13px] text-ink/65">
+          <span class="text-ink/45">Diterima di</span> <span class="font-semibold text-ink">University of Melbourne</span>
+        </div>
+      </article>
+
+      <article class="bg-card border hairline rounded-2xl p-6 flex flex-col lift">
+        <div class="flex items-center gap-3">
+          <div class="w-12 h-12 rounded-full stripe-placeholder"></div>
+          <div>
+            <div class="font-display text-[17px] font-semibold leading-tight">Bagas Wirawan</div>
+            <div class="text-[12.5px] text-ink/55">PTE Academic · 8 minggu</div>
+          </div>
+        </div>
+        <div class="mt-6 flex items-end gap-2">
+          <span class="font-display text-[64px] leading-none font-semibold text-teal-700">82</span>
+          <span class="text-[12.5px] text-ink/55 mb-2">/ 90 PTE</span>
+        </div>
+        <div class="mt-4 grid grid-cols-4 gap-1.5 text-[11.5px]">
+          <div class="bg-paper rounded-md px-2 py-1.5 text-center"><div class="text-ink/50">L</div><div class="font-semibold">85</div></div>
+          <div class="bg-paper rounded-md px-2 py-1.5 text-center"><div class="text-ink/50">R</div><div class="font-semibold">79</div></div>
+          <div class="bg-paper rounded-md px-2 py-1.5 text-center"><div class="text-ink/50">W</div><div class="font-semibold">81</div></div>
+          <div class="bg-paper rounded-md px-2 py-1.5 text-center"><div class="text-ink/50">S</div><div class="font-semibold">84</div></div>
+        </div>
+        <div class="mt-5 pt-5 border-t hairline text-[13px] text-ink/65">
+          <span class="text-ink/45">Skilled Migration</span> <span class="font-semibold text-ink">→ Sydney, Australia</span>
+        </div>
+      </article>
+
+      <article class="bg-teal-700 text-parch rounded-2xl p-6 flex flex-col">
+        <div class="flex items-center gap-3">
+          <div class="w-12 h-12 rounded-full bg-parch/15"></div>
+          <div>
+            <div class="font-display text-[17px] font-semibold leading-tight">Aisyah Nurhaliza</div>
+            <div class="text-[12.5px] text-parch/65">IELTS General · 12 minggu</div>
+          </div>
+        </div>
+        <div class="mt-6 flex items-end gap-2">
+          <span class="font-display text-[64px] leading-none font-semibold text-terra-400">8.0</span>
+          <span class="text-[12.5px] text-parch/65 mb-2">overall</span>
+        </div>
+        <div class="mt-4 grid grid-cols-4 gap-1.5 text-[11.5px]">
+          <div class="bg-parch/10 rounded-md px-2 py-1.5 text-center"><div class="text-parch/55">L</div><div class="font-semibold">8.5</div></div>
+          <div class="bg-parch/10 rounded-md px-2 py-1.5 text-center"><div class="text-parch/55">R</div><div class="font-semibold">8.0</div></div>
+          <div class="bg-parch/10 rounded-md px-2 py-1.5 text-center"><div class="text-parch/55">W</div><div class="font-semibold">7.5</div></div>
+          <div class="bg-parch/10 rounded-md px-2 py-1.5 text-center"><div class="text-parch/55">S</div><div class="font-semibold">8.0</div></div>
+        </div>
+        <div class="mt-5 pt-5 border-t border-parch/15 text-[13px] text-parch/80">
+          <span class="text-parch/55">PR application</span> <span class="font-semibold text-parch">→ Vancouver, Canada</span>
+        </div>
+      </article>
+    </div>
+
+    <p class="mt-6 text-[12.5px] text-ink/50 max-w-[640px]">
+      Catatan: hasil di atas adalah sampel terbaru dari periode April 2026. Kami publikasikan ulang setiap akhir bulan — dengan izin tertulis dari masing-masing siswa.
+    </p>
+  </div>
+</section>
+
+<!-- ============== TESTIMONIALS ============== -->
+<section class="py-20 md:py-28 bg-teal-700 text-parch relative overflow-hidden">
+  <div class="absolute inset-0 grain opacity-20"></div>
+  <div class="max-w-[1280px] mx-auto px-5 md:px-8 relative">
+    <div class="grid md:grid-cols-12 gap-8 mb-12">
+      <div class="md:col-span-7">
+        <div class="font-mono uppercase tracking-[0.18em] text-[11.5px] text-terra-400">— Apa kata siswa kami</div>
+        <h2 class="mt-3 font-display text-[40px] md:text-[52px] font-medium leading-[1.02]">Cerita yang membuat kami<br/>tetap mengajar di hari Sabtu pagi.</h2>
+      </div>
+    </div>
+
+    <div class="grid md:grid-cols-3 gap-4">
+      <figure class="bg-card text-ink rounded-2xl p-6 flex flex-col">
+        <span class="font-display text-[44px] text-terra-500 leading-none">"</span>
+        <blockquote class="mt-1 font-display text-[20px] leading-[1.35] tracking-tight">
+          Speaking saya naik dari 5.5 ke 7.5 dalam 10 minggu. Pak Adit koreksi pelan-pelan, jadi enggak takut salah.
+        </blockquote>
+        <figcaption class="mt-6 pt-6 border-t hairline flex items-center gap-3">
+          <div class="w-10 h-10 rounded-full stripe-placeholder"></div>
+          <div class="text-[13px] leading-tight">
+            <div class="font-semibold">Rizky Pratama</div>
+            <div class="text-ink/55">IELTS Academic · 7.5 → Monash</div>
+          </div>
+        </figcaption>
+      </figure>
+
+      <figure class="bg-card text-ink rounded-2xl p-6 flex flex-col">
+        <span class="font-display text-[44px] text-terra-500 leading-none">"</span>
+        <blockquote class="mt-1 font-display text-[20px] leading-[1.35] tracking-tight">
+          Mock test mingguan bikin hari ujian asli rasanya cuma "another Saturday". Tahu persis mau ngapain.
+        </blockquote>
+        <figcaption class="mt-6 pt-6 border-t hairline flex items-center gap-3">
+          <div class="w-10 h-10 rounded-full stripe-placeholder"></div>
+          <div class="text-[13px] leading-tight">
+            <div class="font-semibold">Dewi Anggraini</div>
+            <div class="text-ink/55">IELTS General · 8.0 → Auckland</div>
+          </div>
+        </figcaption>
+      </figure>
+
+      <figure class="bg-card text-ink rounded-2xl p-6 flex flex-col">
+        <span class="font-display text-[44px] text-terra-500 leading-none">"</span>
+        <blockquote class="mt-1 font-display text-[20px] leading-[1.35] tracking-tight">
+          Kelasnya kecil, jadi enggak bisa ngumpet. Setiap sesi pasti speaking — itu game changer buat saya.
+        </blockquote>
+        <figcaption class="mt-6 pt-6 border-t hairline flex items-center gap-3">
+          <div class="w-10 h-10 rounded-full stripe-placeholder"></div>
+          <div class="text-[13px] leading-tight">
+            <div class="font-semibold">Farhan Maulana</div>
+            <div class="text-ink/55">TOEFL iBT · 108 → NYU Stern</div>
+          </div>
+        </figcaption>
+      </figure>
+    </div>
+  </div>
+</section>
+
+<!-- ============== EBOOK STORE ============== -->
+<section id="ebooks" class="py-20 md:py-28 bg-paper/40 border-y hairline">
+  <div class="max-w-[1280px] mx-auto px-5 md:px-8">
+    <div class="grid md:grid-cols-12 gap-8 items-end mb-10">
+      <div class="md:col-span-7">
+        <div class="font-mono uppercase tracking-[0.18em] text-[11.5px] text-terra-600">— Toko ebook</div>
+        <h2 class="mt-3 font-display text-[40px] md:text-[52px] font-medium leading-[1.02]">Lanjutkan belajar<br/>di rumah, dengan <em class="not-italic text-terra-600">harga terjangkau</em>.</h2>
+      </div>
+      <p class="md:col-span-5 text-[16px] text-ink/65 leading-relaxed">
+        Panduan, latihan soal, dan strategi langsung dari pengajar Sir Joshua — dikirim ke email kamu dalam format PDF &amp; EPUB, bisa dibaca di perangkat apa saja.
+      </p>
+    </div>
+
+    <!-- filter chips -->
+    <div class="flex flex-wrap items-center gap-2 mb-8" id="ebookFilters">
+      <button data-filter="all" class="chip px-4 py-2 rounded-full text-[13px] font-semibold bg-teal-600 text-parch border border-teal-600">Semua</button>
+      <button data-filter="IELTS" class="chip px-4 py-2 rounded-full text-[13px] font-semibold bg-card border hairline text-ink/70 hover:border-teal-600">IELTS</button>
+      <button data-filter="TOEFL" class="chip px-4 py-2 rounded-full text-[13px] font-semibold bg-card border hairline text-ink/70 hover:border-teal-600">TOEFL</button>
+      <button data-filter="PTE" class="chip px-4 py-2 rounded-full text-[13px] font-semibold bg-card border hairline text-ink/70 hover:border-teal-600">PTE</button>
+      <button data-filter="Umum" class="chip px-4 py-2 rounded-full text-[13px] font-semibold bg-card border hairline text-ink/70 hover:border-teal-600">Umum</button>
+    </div>
+
+    <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
+@foreach (var e in Model.Ebooks.Where(x => !x.IsBundle))
+{
+      <article class="ebook-card lift bg-card border hairline rounded-2xl p-4 flex flex-col" data-product data-id="@e.Id" data-title="@e.Title" data-author="@e.Author" data-price="@e.PriceIdr" data-cat="@e.Category" data-cover="@e.Cover">
+        <div class="relative">
+@if (e.Badge == "Terlaris")
+{
+          <span class="absolute z-10 top-3 right-3 px-2 py-0.5 rounded-full bg-terra-500 text-white text-[10.5px] font-semibold tracking-wide">Terlaris</span>
+}
+else if (e.Badge == "Baru")
+{
+          <span class="absolute z-10 top-3 right-3 px-2 py-0.5 rounded-full bg-emerald-500 text-white text-[10.5px] font-semibold tracking-wide">Baru</span>
+}
+          <div class="ebook-cover cover-@e.Cover"><span class="spine"></span><span class="frame"></span>
+            <div class="inner"><span class="imprint">Sir Joshua Press</span><div class="flex-1"></div><div class="rule"></div><span class="series">@e.Series</span><div class="title">@e.Title</div><span class="by">@e.Author</span></div>
+          </div>
+        </div>
+        <div class="mt-4 flex items-center gap-2 text-[12px]"><span class="px-2 py-0.5 rounded-full bg-teal-50 text-teal-700 font-medium">@e.Category</span><span class="text-ink/55">@e.Meta</span></div>
+        <h3 class="mt-2 font-display text-[20px] font-semibold leading-tight">@e.Title</h3>
+        <p class="mt-1 text-[13.5px] text-ink/60 leading-snug">@e.Description</p>
+        <div class="mt-2.5 flex items-center gap-1.5 text-[12.5px] text-ink/65"><svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="#D97757"><path d="M12 2l2.9 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77 5.82 21 7 14.14l-5-4.87 7.1-1.01z"/></svg><span class="font-semibold text-ink/80">@e.Rating.ToString("0.0", inv)</span><span class="text-ink/40">(@e.ReviewCount ulasan)</span></div>
+        <div class="mt-auto pt-4 flex items-center justify-between gap-3">
+          <div class="font-display text-[21px] font-semibold leading-none">@Rp(e.PriceIdr)</div>
+          <button class="add-cart inline-flex items-center gap-1.5 px-4 py-2.5 rounded-full bg-teal-600 text-parch text-[13px] font-semibold hover:bg-teal-700 transition" data-id="@e.Id"><svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M12 5v14M5 12h14"/></svg>Tambah</button>
+        </div>
+      </article>
+}
+    </div>
+
+    <p id="ebookEmpty" class="hidden text-center text-ink/55 py-14 text-[15px]">Belum ada ebook di kategori ini.</p>
+
+@{ var bundle = Model.Ebooks.FirstOrDefault(x => x.IsBundle); }
+@if (bundle != null)
+{
+    <div class="mt-5 rounded-2xl bg-teal-700 text-parch p-6 md:p-9 grid md:grid-cols-12 gap-6 items-center relative overflow-hidden" data-product data-id="@bundle.Id" data-title="@bundle.Title" data-author="@bundle.Author" data-price="@bundle.PriceIdr" data-cat="@bundle.Category" data-cover="@bundle.Cover">
+      <div class="absolute inset-0 grain opacity-15"></div>
+      <div class="md:col-span-8 relative">
+        <div class="font-mono uppercase tracking-[0.18em] text-[11.5px] text-terra-400">- Paket hemat</div>
+        <h3 class="mt-2 font-display text-[30px] md:text-[38px] font-medium leading-[1.04]">@bundle.Title - 6 ebook sekaligus.</h3>
+        <p class="mt-3 text-[14.5px] text-parch/75 max-w-[560px]">@bundle.Description</p>
+        <div class="mt-5 flex flex-wrap gap-1.5 text-[11.5px]">
+@foreach (var name in new[] { "Writing Playbook", "Speaking Without Fear", "TOEFL Integrated", "PTE Rapid Score", "Vocabulary Builder", "Reading Speed" })
+{
+          <span class="px-2.5 py-1 rounded-full bg-parch/10 border border-parch/15">@name</span>
+}
+        </div>
+      </div>
+      <div class="md:col-span-4 md:text-right relative">
+@if (bundle.CompareAtIdr.HasValue)
+{
+        <div class="text-[13px] text-parch/55 line-through">@Rp(bundle.CompareAtIdr.Value)</div>
+}
+        <div class="font-display text-[44px] font-semibold leading-none mt-1">@Rp(bundle.PriceIdr)</div>
+        <button class="add-cart mt-5 w-full md:w-auto inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-full bg-terra-500 text-white font-semibold hover:bg-terra-600 transition" data-id="@bundle.Id"><svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M12 5v14M5 12h14"/></svg>Tambah paket</button>
+      </div>
+    </div>
+}
+  </div>
+</section>
+
+<!-- ============== BRANCHES ============== -->
+<section id="locations" class="py-20 md:py-28">
+  <div class="max-w-[1280px] mx-auto px-5 md:px-8">
+    <div class="flex items-end justify-between flex-wrap gap-6 mb-10">
+      <div>
+        <div class="font-mono uppercase tracking-[0.18em] text-[11.5px] text-terra-600">— Cabang kami</div>
+        <h2 class="mt-3 font-display text-[40px] md:text-[52px] font-medium leading-[1.02]">Hadir di Jakarta, Bandung, &amp; Surabaya.</h2>
+      </div>
+      <p class="text-[14.5px] text-ink/60 max-w-[320px]">Datang langsung untuk demo, atau ikut kelas online via Zoom dari mana saja di Indonesia.</p>
+    </div>
+
+    <div class="grid md:grid-cols-3 gap-4">
+      <article class="bg-card border hairline rounded-2xl overflow-hidden flex flex-col lift">
+        <div class="aspect-[16/10] stripe-placeholder relative">
+          <span class="absolute bottom-3 left-3 font-mono text-[10px] tracking-widest uppercase text-ink/55 bg-surface/80 px-2 py-0.5 rounded">foto cabang · kemang</span>
+          <span class="absolute top-3 left-3 px-2 py-0.5 rounded-full bg-emerald-500 text-white text-[11px] font-semibold">Buka sekarang</span>
+        </div>
+        <div class="p-5 flex flex-col flex-1">
+          <h3 class="font-display text-[22px] font-semibold leading-tight">Jakarta — Kemang</h3>
+          <p class="mt-1 text-[13.5px] text-ink/65 leading-relaxed">Jl. Kemang Raya No. 14, Mampang Prapatan,<br/>Jakarta Selatan 12730</p>
+          <div class="mt-4 grid grid-cols-2 gap-2 text-[12.5px] text-ink/65">
+            <div><div class="text-ink/45">Senin–Sabtu</div><div class="font-semibold text-ink">09.00 — 21.00</div></div>
+            <div><div class="text-ink/45">Minggu</div><div class="font-semibold text-ink">10.00 — 17.00</div></div>
+          </div>
+          <div class="mt-5 pt-5 border-t hairline flex items-center justify-between">
+            <a href="tel:+622150999000" class="text-[13px] text-teal-700 font-semibold">(021) 5099-9000</a>
+            <a href="#" class="text-[13px] font-semibold text-terra-600 hover:text-terra-700">Buka di Maps →</a>
+          </div>
+        </div>
+      </article>
+
+      <article class="bg-card border hairline rounded-2xl overflow-hidden flex flex-col lift">
+        <div class="aspect-[16/10] stripe-placeholder relative">
+          <span class="absolute bottom-3 left-3 font-mono text-[10px] tracking-widest uppercase text-ink/55 bg-surface/80 px-2 py-0.5 rounded">foto cabang · dago</span>
+          <span class="absolute top-3 left-3 px-2 py-0.5 rounded-full bg-emerald-500 text-white text-[11px] font-semibold">Buka sekarang</span>
+        </div>
+        <div class="p-5 flex flex-col flex-1">
+          <h3 class="font-display text-[22px] font-semibold leading-tight">Bandung — Dago</h3>
+          <p class="mt-1 text-[13.5px] text-ink/65 leading-relaxed">Jl. Ir. H. Djuanda No. 168, Coblong,<br/>Kota Bandung 40132</p>
+          <div class="mt-4 grid grid-cols-2 gap-2 text-[12.5px] text-ink/65">
+            <div><div class="text-ink/45">Senin–Sabtu</div><div class="font-semibold text-ink">09.00 — 20.00</div></div>
+            <div><div class="text-ink/45">Minggu</div><div class="font-semibold text-ink">10.00 — 16.00</div></div>
+          </div>
+          <div class="mt-5 pt-5 border-t hairline flex items-center justify-between">
+            <a href="tel:+62225099111" class="text-[13px] text-teal-700 font-semibold">(022) 509-9111</a>
+            <a href="#" class="text-[13px] font-semibold text-terra-600 hover:text-terra-700">Buka di Maps →</a>
+          </div>
+        </div>
+      </article>
+
+      <article class="bg-card border hairline rounded-2xl overflow-hidden flex flex-col lift">
+        <div class="aspect-[16/10] stripe-placeholder relative">
+          <span class="absolute bottom-3 left-3 font-mono text-[10px] tracking-widest uppercase text-ink/55 bg-surface/80 px-2 py-0.5 rounded">foto cabang · pakuwon</span>
+          <span class="absolute top-3 left-3 px-2 py-0.5 rounded-full bg-amber-500 text-white text-[11px] font-semibold">Soon · Juni 2026</span>
+        </div>
+        <div class="p-5 flex flex-col flex-1">
+          <h3 class="font-display text-[22px] font-semibold leading-tight">Surabaya — Pakuwon</h3>
+          <p class="mt-1 text-[13.5px] text-ink/65 leading-relaxed">Pakuwon Mall, Lantai UG Unit 27,<br/>Surabaya 60216</p>
+          <div class="mt-4 grid grid-cols-2 gap-2 text-[12.5px] text-ink/65">
+            <div><div class="text-ink/45">Pre-launch</div><div class="font-semibold text-ink">Daftar waitlist</div></div>
+            <div><div class="text-ink/45">Online intake</div><div class="font-semibold text-ink">Sudah buka</div></div>
+          </div>
+          <div class="mt-5 pt-5 border-t hairline flex items-center justify-between">
+            <a href="#" class="text-[13px] text-teal-700 font-semibold">Daftar waitlist</a>
+            <a href="#" class="text-[13px] font-semibold text-terra-600 hover:text-terra-700">Lihat lokasi →</a>
+          </div>
+        </div>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- ============== CERTIFICATIONS / PAYMENT STRIP ============== -->
+<section class="py-14 bg-paper/40 border-y hairline">
+  <div class="max-w-[1280px] mx-auto px-5 md:px-8 grid md:grid-cols-2 gap-10 items-start">
+    <div>
+      <div class="font-mono uppercase tracking-[0.18em] text-[11.5px] text-terra-600 mb-3">— Sertifikasi &amp; afiliasi</div>
+      <div class="flex flex-wrap items-center gap-x-6 gap-y-3">
+        <div class="px-4 py-2.5 rounded-lg border hairline bg-card font-display text-[15px]">British Council Partner</div>
+        <div class="px-4 py-2.5 rounded-lg border hairline bg-card font-display italic text-[15px]">IDP IELTS Test Centre</div>
+        <div class="px-4 py-2.5 rounded-lg border hairline bg-card font-display text-[15px] font-semibold">Cambridge English</div>
+        <div class="px-4 py-2.5 rounded-lg border hairline bg-card font-mono text-[13px] tracking-wider">ETS · TOEFL iBT</div>
+        <div class="px-4 py-2.5 rounded-lg border hairline bg-card font-display italic text-[15px]">Pearson PTE</div>
+      </div>
+    </div>
+    <div>
+      <div class="font-mono uppercase tracking-[0.18em] text-[11.5px] text-terra-600 mb-3">— Pembayaran &amp; cicilan 0%</div>
+      <div class="flex flex-wrap items-center gap-x-5 gap-y-3 text-ink/60">
+        <span class="font-display text-[14px] font-semibold tracking-tight">BCA</span>
+        <span class="text-line">·</span>
+        <span class="font-display text-[14px] font-semibold tracking-tight">Mandiri</span>
+        <span class="text-line">·</span>
+        <span class="font-display text-[14px] font-semibold tracking-tight">BRI</span>
+        <span class="text-line">·</span>
+        <span class="font-mono text-[12px] tracking-widest">QRIS</span>
+        <span class="text-line">·</span>
+        <span class="font-display italic text-[14px]">OVO</span>
+        <span class="text-line">·</span>
+        <span class="font-display text-[14px] font-semibold">GoPay</span>
+        <span class="text-line">·</span>
+        <span class="font-display text-[14px]">DANA</span>
+        <span class="ml-1 px-2 py-0.5 rounded-full bg-emerald-50 border border-emerald-200 text-emerald-700 text-[11.5px] font-semibold">Cicilan 0%</span>
+      </div>
+      <p class="mt-3 text-[12.5px] text-ink/50 max-w-md">Cicilan 0% tersedia hingga 12 bulan dengan kartu kredit BCA, Mandiri, dan BRI. Virtual account dan QRIS juga tersedia.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ============== FAQ ============== -->
+<section id="faq" class="py-20 md:py-28">
+  <div class="max-w-[1080px] mx-auto px-5 md:px-8">
+    <div class="grid md:grid-cols-12 gap-8 mb-10">
+      <div class="md:col-span-6">
+        <div class="font-mono uppercase tracking-[0.18em] text-[11.5px] text-terra-600">— Pertanyaan yang sering ditanyakan</div>
+        <h2 class="mt-3 font-display text-[40px] md:text-[52px] font-medium leading-[1.02]">Jawaban jujur,<br/>tanpa <em class="not-italic text-terra-600">spin</em>.</h2>
+      </div>
+      <p class="md:col-span-6 self-end text-[15px] text-ink/65 max-w-[440px]">Belum terjawab? <a href="#" class="text-teal-700 font-semibold underline-hover">WhatsApp tim kami</a> — biasanya dijawab dalam 30 menit di jam kerja.</p>
+    </div>
+
+    <div class="divide-y hairline border-y hairline">
+      <details open class="group py-5">
+        <summary class="flex items-center justify-between gap-6">
+          <span class="font-display text-[20px] md:text-[22px] font-semibold leading-snug pr-6">Berapa lama waktu untuk mencapai band 7?</span>
+          <span class="faq-icon shrink-0 w-9 h-9 rounded-full border hairline flex items-center justify-center text-terra-600 text-xl leading-none">+</span>
+        </summary>
+        <p class="mt-3 text-[15.5px] text-ink/70 leading-relaxed max-w-[760px]">Tergantung level awal. Dari band 5.5, biasanya 8–12 minggu intensif. Kami beri estimasi pasti setelah tes diagnostik gratis — termasuk skill mana yang harus diperkuat lebih dulu.</p>
+      </details>
+      <details class="group py-5">
+        <summary class="flex items-center justify-between gap-6">
+          <span class="font-display text-[20px] md:text-[22px] font-semibold leading-snug pr-6">Apakah ada jaminan band score?</span>
+          <span class="faq-icon shrink-0 w-9 h-9 rounded-full border hairline flex items-center justify-center text-terra-600 text-xl leading-none">+</span>
+        </summary>
+        <p class="mt-3 text-[15.5px] text-ink/70 leading-relaxed max-w-[760px]">Kami tidak menjual janji palsu. Tapi &gt;90% siswa kami mencapai target band score mereka di percobaan pertama atau kedua. Kalau belum tercapai, kami beri kelas tambahan gratis — bukan refund yang tidak realistis.</p>
+      </details>
+      <details class="group py-5">
+        <summary class="flex items-center justify-between gap-6">
+          <span class="font-display text-[20px] md:text-[22px] font-semibold leading-snug pr-6">Apakah pengajar native speaker?</span>
+          <span class="faq-icon shrink-0 w-9 h-9 rounded-full border hairline flex items-center justify-center text-terra-600 text-xl leading-none">+</span>
+        </summary>
+        <p class="mt-3 text-[15.5px] text-ink/70 leading-relaxed max-w-[760px]">Sebagian iya. Kami juga punya pengajar Indonesia bersertifikat CELTA / TESOL — banyak siswa lebih nyaman mulai dengan pengajar lokal lalu pindah ke native saat speaking sudah lancar.</p>
+      </details>
+      <details class="group py-5">
+        <summary class="flex items-center justify-between gap-6">
+          <span class="font-display text-[20px] md:text-[22px] font-semibold leading-snug pr-6">Bagaimana jika saya tidak bisa hadir di kelas?</span>
+          <span class="faq-icon shrink-0 w-9 h-9 rounded-full border hairline flex items-center justify-center text-terra-600 text-xl leading-none">+</span>
+        </summary>
+        <p class="mt-3 text-[15.5px] text-ink/70 leading-relaxed max-w-[760px]">Setiap kelas direkam — kamu bisa tonton ulang kapan saja di portal siswa. Kami juga jadwalkan kelas pengganti dengan grup level setara.</p>
+      </details>
+      <details class="group py-5">
+        <summary class="flex items-center justify-between gap-6">
+          <span class="font-display text-[20px] md:text-[22px] font-semibold leading-snug pr-6">Bisakah dibantu booking ujian IELTS resmi?</span>
+          <span class="faq-icon shrink-0 w-9 h-9 rounded-full border hairline flex items-center justify-center text-terra-600 text-xl leading-none">+</span>
+        </summary>
+        <p class="mt-3 text-[15.5px] text-ink/70 leading-relaxed max-w-[760px]">Ya — kami partner dengan British Council dan IDP. Kami bantu pilih center, tanggal, dan jenis ujian (Computer-based atau Paper-based) sesuai timeline kamu.</p>
+      </details>
+      <details class="group py-5">
+        <summary class="flex items-center justify-between gap-6">
+          <span class="font-display text-[20px] md:text-[22px] font-semibold leading-snug pr-6">Apakah ada kelas online?</span>
+          <span class="faq-icon shrink-0 w-9 h-9 rounded-full border hairline flex items-center justify-center text-terra-600 text-xl leading-none">+</span>
+        </summary>
+        <p class="mt-3 text-[15.5px] text-ink/70 leading-relaxed max-w-[760px]">Iya, kami punya kelas hybrid — kamu bisa pilih offline di centre kami atau live online via Zoom. Banyak siswa kami pakai keduanya bergantian.</p>
+      </details>
+      <details class="group py-5">
+        <summary class="flex items-center justify-between gap-6">
+          <span class="font-display text-[20px] md:text-[22px] font-semibold leading-snug pr-6">Apa beda IELTS Academic dan General Training?</span>
+          <span class="faq-icon shrink-0 w-9 h-9 rounded-full border hairline flex items-center justify-center text-terra-600 text-xl leading-none">+</span>
+        </summary>
+        <p class="mt-3 text-[15.5px] text-ink/70 leading-relaxed max-w-[760px]">Academic untuk kuliah; General untuk kerja, imigrasi, atau training. Kami bantu memilih yang sesuai dengan tujuan kamu di sesi konsultasi.</p>
+      </details>
+      <details class="group py-5">
+        <summary class="flex items-center justify-between gap-6">
+          <span class="font-display text-[20px] md:text-[22px] font-semibold leading-snug pr-6">Apakah pembayaran bisa dicicil?</span>
+          <span class="faq-icon shrink-0 w-9 h-9 rounded-full border hairline flex items-center justify-center text-terra-600 text-xl leading-none">+</span>
+        </summary>
+        <p class="mt-3 text-[15.5px] text-ink/70 leading-relaxed max-w-[760px]">Iya — kami terima cicilan 0% dengan beberapa bank (BCA, Mandiri, BRI), serta pembayaran QRIS dan virtual account.</p>
+      </details>
+    </div>
+  </div>
+</section>
+
+<!-- ============== FINAL CTA BAND ============== -->
+<section class="py-16 md:py-24 bg-teal-700 text-parch relative overflow-hidden">
+  <div class="absolute -top-20 -right-20 w-[400px] h-[400px] rounded-full bg-terra-500/20 blur-3xl"></div>
+  <div class="absolute inset-0 grain opacity-15"></div>
+  <div class="max-w-[1280px] mx-auto px-5 md:px-8 grid md:grid-cols-12 gap-10 items-center relative">
+    <div class="md:col-span-7">
+      <div class="font-mono uppercase tracking-[0.18em] text-[11.5px] text-terra-400">— Siap mulai?</div>
+      <h2 class="mt-3 font-display text-[40px] md:text-[64px] font-medium leading-[1.0]">
+        Trial gratis 1 jam.<br/>
+        <em class="not-italic text-terra-400">Tanpa biaya, tanpa keterikatan.</em>
+      </h2>
+      <p class="mt-5 text-[16px] text-parch/70 max-w-[560px]">Datang ke salah satu cabang kami atau ikut online. Kami pelajari level kamu, buat plan, baru kamu putuskan mau lanjut atau tidak.</p>
+    </div>
+    <div class="md:col-span-5 flex flex-col gap-3">
+      <a href="#trial" class="px-6 py-4 rounded-full bg-terra-500 text-white font-semibold text-center hover:bg-terra-600 transition shadow-[0_15px_40px_-15px_rgba(217,119,87,.7)]">Daftar Trial Gratis →</a>
+      <a href="#" class="px-6 py-4 rounded-full bg-parch/10 hover:bg-parch/20 text-parch font-semibold text-center border border-parch/20 transition flex items-center justify-center gap-2">
+        <svg class="w-5 h-5" viewBox="0 0 24 24" fill="currentColor"><path d="M17.6 6.32A7.85 7.85 0 0 0 12.05 4a7.95 7.95 0 0 0-6.9 11.93L4 20l4.18-1.1a7.93 7.93 0 0 0 3.86 1h.01c4.39 0 7.96-3.57 7.96-7.96 0-2.13-.83-4.13-2.34-5.62zM12.05 18.5h-.01a6.6 6.6 0 0 1-3.36-.92l-.24-.14-2.49.65.66-2.42-.16-.25a6.6 6.6 0 0 1-1.01-3.5c0-3.65 2.97-6.62 6.62-6.62 1.77 0 3.43.69 4.68 1.94a6.59 6.59 0 0 1 1.94 4.68c0 3.65-2.97 6.62-6.63 6.62z"/></svg>
+        WhatsApp tim kami
+      </a>
+      <p class="text-center text-[12.5px] text-parch/55 mt-1">Atau telepon (021) 5099-9000 · Senin–Sabtu 09.00–21.00 WIB</p>
+    </div>
+  </div>
+</section>
+
+<!-- ============== FOOTER ============== -->
+<footer class="bg-teal-800 text-parch/80">
+  <div class="max-w-[1280px] mx-auto px-5 md:px-8 py-16 grid md:grid-cols-12 gap-10">
+    <div class="md:col-span-4">
+      <div class="flex items-center gap-2.5">
+        <img src="/uploads/sir-joshua-logo.png" alt="Sir Joshua Academy" class="h-12 w-auto object-contain">
+        <span class="font-display text-[20px] font-semibold tracking-tight text-parch leading-none">Sir Joshua<span class="text-terra-400">.</span></span>
+      </div>
+      <p class="mt-5 text-[14px] leading-relaxed max-w-[300px] text-parch/65">Kursus IELTS, TOEFL, PTE, dan Business English untuk siswa Indonesia yang serius soal kuliah, kerja, dan imigrasi ke luar negeri.</p>
+      <div class="mt-6 flex items-center gap-3">
+        <a href="#" aria-label="Instagram" class="w-9 h-9 rounded-full border border-parch/20 flex items-center justify-center hover:bg-parch/10 transition text-parch/70 hover:text-parch">
+          <svg class="w-[18px] h-[18px]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4.5"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/></svg>
+        </a>
+        <a href="#" aria-label="TikTok" class="w-9 h-9 rounded-full border border-parch/20 flex items-center justify-center hover:bg-parch/10 transition text-parch/70 hover:text-parch">
+          <svg class="w-[17px] h-[17px]" viewBox="0 0 24 24" fill="currentColor"><path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-2.88 2.5 2.89 2.89 0 0 1-2.89-2.89 2.89 2.89 0 0 1 2.89-2.89c.28 0 .54.04.79.1V9.01a6.33 6.33 0 0 0-.79-.05 6.34 6.34 0 0 0-6.34 6.34 6.34 6.34 0 0 0 6.34 6.34 6.34 6.34 0 0 0 6.33-6.34V9a8.19 8.19 0 0 0 4.78 1.52V7.07a4.85 4.85 0 0 1-1.01-.38z"/></svg>
+        </a>
+        <a href="#" aria-label="YouTube" class="w-9 h-9 rounded-full border border-parch/20 flex items-center justify-center hover:bg-parch/10 transition text-parch/70 hover:text-parch">
+          <svg class="w-[18px] h-[18px]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="5" width="20" height="14" rx="3"/><polygon points="10 9 15 12 10 15" fill="currentColor" stroke="none"/></svg>
+        </a>
+        <a href="#" aria-label="LinkedIn" class="w-9 h-9 rounded-full border border-parch/20 flex items-center justify-center hover:bg-parch/10 transition text-parch/70 hover:text-parch">
+          <svg class="w-[17px] h-[17px]" viewBox="0 0 24 24" fill="currentColor"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>
+        </a>
+      </div>
+    </div>
+
+    <div class="md:col-span-2">
+      <div class="font-mono uppercase tracking-[0.18em] text-[11.5px] text-terra-400 mb-4">Programs</div>
+      <ul class="space-y-2.5 text-[14px]">
+        <li><a href="#" class="hover:text-parch">IELTS Academic</a></li>
+        <li><a href="#" class="hover:text-parch">IELTS General</a></li>
+        <li><a href="#" class="hover:text-parch">TOEFL iBT</a></li>
+        <li><a href="#" class="hover:text-parch">PTE Academic</a></li>
+        <li><a href="#" class="hover:text-parch">Business English</a></li>
+        <li><a href="#" class="hover:text-parch font-semibold text-parch">Trial Gratis →</a></li>
+      </ul>
+    </div>
+
+    <div class="md:col-span-2">
+      <div class="font-mono uppercase tracking-[0.18em] text-[11.5px] text-terra-400 mb-4">Tentang</div>
+      <ul class="space-y-2.5 text-[14px]">
+        <li><a href="#" class="hover:text-parch">Cerita kami</a></li>
+        <li><a href="#" class="hover:text-parch">Pengajar</a></li>
+        <li><a href="#" class="hover:text-parch">Lokasi cabang</a></li>
+        <li><a href="#" class="hover:text-parch">Hasil siswa</a></li>
+      </ul>
+    </div>
+
+    <div class="md:col-span-2">
+      <div class="font-mono uppercase tracking-[0.18em] text-[11.5px] text-terra-400 mb-4">Bantuan</div>
+      <ul class="space-y-2.5 text-[14px]">
+        <li><a href="#" class="hover:text-parch">FAQ</a></li>
+        <li><a href="#" class="hover:text-parch">Hubungi kami</a></li>
+        <li><a href="#" class="hover:text-parch">Trial gratis</a></li>
+      </ul>
+    </div>
+
+    <div class="md:col-span-2">
+      <div class="font-mono uppercase tracking-[0.18em] text-[11.5px] text-terra-400 mb-4">Kontak</div>
+      <ul class="space-y-2.5 text-[14px]">
+        <li><a href="tel:+622150999000" class="hover:text-parch">(021) 5099-9000</a></li>
+        <li><a href="mailto:halo@@sirjoshua.id" class="hover:text-parch">halo@@sirjoshua.id</a></li>
+        <li class="text-parch/65">Sen–Sab · 09.00–21.00 WIB</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="border-t border-parch/10">
+    <div class="max-w-[1280px] mx-auto px-5 md:px-8 py-5 flex flex-wrap items-center justify-between gap-3 text-[12.5px] text-parch/55">
+      <div>© 2026 Sir Joshua Academy. Semua hak dilindungi.</div>
+      <div class="flex flex-wrap items-center gap-x-5 gap-y-1">
+        <a href="#" class="hover:text-parch">Kebijakan Privasi</a>
+        <a href="#" class="hover:text-parch">Syarat &amp; Ketentuan</a>
+        <a href="#" class="hover:text-parch">Refund</a>
+        <a href="#" class="hover:text-parch">Cookie</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<!-- ============== WHATSAPP FLOATING ============== -->
+<a href="#" aria-label="Chat WhatsApp" class="fixed z-50 bottom-24 md:bottom-6 right-5 md:right-6">
+  <span class="relative inline-flex items-center justify-center w-14 h-14 rounded-full bg-[#25D366] text-white shadow-[0_10px_30px_-8px_rgba(37,211,102,.7)] pulse-wa">
+    <svg class="w-7 h-7 relative" viewBox="0 0 24 24" fill="currentColor"><path d="M17.6 6.32A7.85 7.85 0 0 0 12.05 4a7.95 7.95 0 0 0-6.9 11.93L4 20l4.18-1.1a7.93 7.93 0 0 0 3.86 1h.01c4.39 0 7.96-3.57 7.96-7.96 0-2.13-.83-4.13-2.34-5.62zM12.05 18.5h-.01a6.6 6.6 0 0 1-3.36-.92l-.24-.14-2.49.65.66-2.42-.16-.25a6.6 6.6 0 0 1-1.01-3.5c0-3.65 2.97-6.62 6.62-6.62 1.77 0 3.43.69 4.68 1.94a6.59 6.59 0 0 1 1.94 4.68c0 3.65-2.97 6.62-6.63 6.62zm3.63-4.96c-.2-.1-1.18-.58-1.36-.65-.18-.07-.32-.1-.45.1-.13.2-.51.65-.63.78-.12.13-.23.15-.43.05-.2-.1-.84-.31-1.6-.99-.59-.52-.99-1.17-1.11-1.37-.12-.2-.01-.31.09-.41.09-.09.2-.23.3-.35.1-.12.13-.2.2-.33.07-.13.03-.25-.02-.35-.05-.1-.45-1.08-.62-1.48-.16-.39-.33-.34-.45-.34l-.38-.01c-.13 0-.34.05-.52.25-.18.2-.68.66-.68 1.6 0 .94.69 1.86.79 1.99.1.13 1.36 2.07 3.29 2.91.46.2.82.32 1.1.41.46.15.88.13 1.21.08.37-.05 1.18-.48 1.34-.95.16-.46.16-.86.12-.95-.05-.09-.18-.14-.38-.24z"/></svg>
+  </span>
+</a>
+
+<!-- ============== MOBILE STICKY CTA ============== -->
+<div class="md:hidden fixed bottom-0 left-0 right-0 z-40 bg-surface/95 backdrop-blur border-t hairline px-4 py-3 flex gap-2">
+  <a href="#trial" class="flex-1 px-4 py-3 rounded-full bg-terra-500 text-white font-semibold text-[14px] text-center">Daftar Trial Gratis</a>
+  <a href="tel:+622150999000" aria-label="Telepon" class="w-12 h-12 rounded-full border hairline bg-card flex items-center justify-center text-teal-700">
+    <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+  </a>
+</div>
+
+<!-- ============== CART DRAWER ============== -->
+<div id="cartOverlay" class="drawer-overlay"></div>
+<aside id="cartDrawer" class="cart-drawer" aria-hidden="true" aria-label="Keranjang belanja">
+  <div class="flex items-center justify-between px-5 py-4 border-b hairline shrink-0">
+    <div>
+      <h3 class="font-display text-[22px] font-semibold leading-none" id="drawerTitle">Keranjang</h3>
+      <p class="text-[12px] text-ink/55 mt-1.5" id="drawerSub">0 item</p>
+    </div>
+    <button id="cartClose" aria-label="Tutup" class="w-9 h-9 rounded-full border hairline flex items-center justify-center text-ink/60 hover:text-ink hover:border-teal-600 transition">
+      <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6 6 18M6 6l12 12"/></svg>
+    </button>
+  </div>
+  <div id="cartBody" class="flex-1 overflow-y-auto no-bar px-5"></div>
+  <div id="cartFooter" class="shrink-0 px-5"></div>
+</aside>
+
+<script>
+(function(){
+  var CART_KEY='check-cart';
+  var CFG = window.SJ_CONFIG || {paypalEnabled:false, currency:'USD', idrPerUsd:16000, promoCode:'SIRJOSHUA10'};
+  var fmt = function(n){ return 'Rp ' + (n||0).toLocaleString('id-ID'); };
+
+  // Catalog is built from the server-rendered showcase; the server still re-prices
+  // every order from the database, so these client values are display-only.
+  var catalog = {};
+  document.querySelectorAll('[data-product]').forEach(function(el){
+    var id = el.getAttribute('data-id');
+    catalog[id] = {
+      id:id,
+      title: el.getAttribute('data-title'),
+      author: el.getAttribute('data-author'),
+      price: parseInt(el.getAttribute('data-price'),10) || 0,
+      cat: el.getAttribute('data-cat'),
+      cover: el.getAttribute('data-cover')
+    };
+  });
+
+  function load(){ try{ return JSON.parse(localStorage.getItem(CART_KEY)) || {}; }catch(e){ return {}; } }
+  function persist(){ try{ localStorage.setItem(CART_KEY, JSON.stringify(cart)); }catch(e){} }
+  var cart = load();
+  var promo = null;
+  var promoErr = false;
+  var step = 'cart';
+  var lastOrder = null;
+  var paypalRendered = false;
+
+  var overlay = document.getElementById('cartOverlay');
+  var drawer  = document.getElementById('cartDrawer');
+  var bodyEl  = document.getElementById('cartBody');
+  var footEl  = document.getElementById('cartFooter');
+  var titleEl = document.getElementById('drawerTitle');
+  var subEl   = document.getElementById('drawerSub');
+  var badgeEl = document.getElementById('cartBadge');
+  var cartBtn = document.getElementById('cartBtn');
+
+  function count(){ var c=0; for(var k in cart){ c+=cart[k]; } return c; }
+  function subtotal(){ var s=0; for(var k in cart){ if(catalog[k]) s += catalog[k].price*cart[k]; } return s; }
+  function discount(){ return promo ? Math.round(subtotal()*promo.rate) : 0; }
+  function total(){ return subtotal() - discount(); }
+  function usd(){ var u = total() / (CFG.idrPerUsd||16000); u = Math.round(u*100)/100; return u < 0.01 ? 0.01 : u; }
+
+  function updateBadge(){ var n = count(); badgeEl.textContent = n; badgeEl.classList.toggle('hide', n===0); }
+  function esc(s){ return (s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+  function thumb(cover){ return '<div class="ebook-cover cart-thumb cover-'+cover+'"><span class="frame"></span></div>'; }
+  function csrf(){ var el=document.querySelector('input[name="__RequestVerificationToken"]'); return el?el.value:''; }
+  function validEmail(e){ return /^[^@@\s]+@@[^@@\s]+\.[^@@\s]+$/.test(e); }
+
+  function row(p,q){
+    return ''+
+    '<div class="flex gap-3 py-4 border-b hairline">'+
+      thumb(p.cover)+
+      '<div class="flex-1 min-w-0">'+
+        '<div class="flex items-start justify-between gap-2">'+
+          '<div class="min-w-0 pr-1">'+
+            '<h4 class="font-display text-[15px] font-semibold leading-tight">'+esc(p.title)+'</h4>'+
+            '<p class="text-[12px] text-ink/55 mt-0.5">'+esc(p.author)+'</p>'+
+          '</div>'+
+          '<button data-act="rem" data-id="'+p.id+'" aria-label="Hapus" class="shrink-0 text-ink/40 hover:text-terra-600 transition"><svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 6h18M8 6V4h8v2M6 6l1 14h10l1-14"/></svg></button>'+
+        '</div>'+
+        '<div class="mt-2.5 flex items-center justify-between">'+
+          '<div class="flex items-center gap-1 border hairline rounded-full p-0.5">'+
+            '<button class="qty-btn hover:bg-paper transition" data-act="dec" data-id="'+p.id+'" aria-label="Kurangi">-</button>'+
+            '<span class="w-7 text-center text-[13px] font-semibold tabular-nums">'+q+'</span>'+
+            '<button class="qty-btn hover:bg-paper transition" data-act="inc" data-id="'+p.id+'" aria-label="Tambah">+</button>'+
+          '</div>'+
+          '<div class="font-display text-[15px] font-semibold">'+fmt(p.price*q)+'</div>'+
+        '</div>'+
+      '</div>'+
+    '</div>';
+  }
+
+  function emptyHtml(){
+    return ''+
+    '<div class="flex flex-col items-center justify-center text-center py-20">'+
+      '<div class="w-16 h-16 rounded-full bg-paper flex items-center justify-center text-ink/40 mb-4"><svg class="w-7 h-7" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M6 6h14.5l-1.6 8H8.1L6 6z"/><path d="M6 6 5.5 3.5H3"/><circle cx="9.5" cy="19" r="1.4"/><circle cx="17" cy="19" r="1.4"/></svg></div>'+
+      '<h4 class="font-display text-[20px] font-semibold">Keranjang masih kosong</h4>'+
+      '<p class="text-[13.5px] text-ink/55 mt-1.5 max-w-[240px]">Tambahkan ebook untuk mulai belajar di rumah.</p>'+
+      '<button data-act="browse" class="mt-5 px-5 py-2.5 rounded-full bg-teal-600 text-parch text-[14px] font-semibold hover:bg-teal-700 transition">Lihat koleksi ebook</button>'+
+    '</div>';
+  }
+
+  function cartFootHtml(){
+    var d = discount();
+    return ''+
+    '<div class="py-4 border-t hairline">'+
+      '<div class="flex gap-2">'+
+        '<input id="promoInput" type="text" value="'+(promo?promo.code:'')+'" placeholder="Kode promo ('+CFG.promoCode+')" class="flex-1 px-3 py-2.5 rounded-lg border hairline bg-card text-[13px] placeholder-ink/35"/>'+
+        '<button data-act="promo" class="px-4 py-2.5 rounded-lg border hairline text-[13px] font-semibold hover:border-teal-600 transition">Terapkan</button>'+
+      '</div>'+
+      (promo ? '<p class="text-[12px] text-teal-700 font-medium mt-2 flex items-center gap-1.5"><svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M20 6 9 17l-5-5"/></svg>Kode '+promo.code+' diterapkan - hemat 10%</p>' : '')+
+      (promoErr ? '<p class="text-[12px] text-terra-600 font-medium mt-2">Kode promo tidak valid.</p>' : '')+
+      '<div class="space-y-1.5 text-[13.5px] mt-4">'+
+        '<div class="flex justify-between text-ink/65"><span>Subtotal</span><span>'+fmt(subtotal())+'</span></div>'+
+        (d>0 ? '<div class="flex justify-between text-teal-700"><span>Diskon</span><span>- '+fmt(d)+'</span></div>' : '')+
+        '<div class="flex justify-between items-baseline pt-2 mt-1 border-t hairline"><span class="font-semibold">Total</span><span class="font-display text-[20px] font-semibold">'+fmt(total())+'</span></div>'+
+      '</div>'+
+      '<button data-act="checkout" class="w-full mt-4 py-3.5 rounded-full bg-terra-500 text-white font-semibold hover:bg-terra-600 transition shadow-[0_10px_24px_-12px_rgba(217,119,87,.85)]">Lanjut ke pembayaran -></button>'+
+      '<p class="text-center text-[11.5px] text-ink/45 mt-2.5">Dikirim ke email - format PDF &amp; EPUB - akses selamanya</p>'+
+    '</div>';
+  }
+
+  function checkoutBodyHtml(){
+    var items = Object.keys(cart).map(function(id){ var p=catalog[id]; return '<div class="flex justify-between text-[13px] text-ink/70 py-1"><span class="truncate pr-3">'+esc(p.title)+' x '+cart[id]+'</span><span class="shrink-0">'+fmt(p.price*cart[id])+'</span></div>'; }).join('');
+    return ''+
+    '<div class="py-4">'+
+      '<button data-act="back" class="text-[13px] text-teal-700 font-semibold inline-flex items-center gap-1 mb-5 hover:gap-1.5 transition-all"><- Kembali ke keranjang</button>'+
+      '<label class="block mb-3"><span class="block text-[12.5px] font-medium text-ink/75 mb-1">Nama lengkap</span>'+
+        '<input id="coName" type="text" autocomplete="name" maxlength="120" value="'+esc(field('name'))+'" placeholder="cth. Putri Ramadhani" class="w-full px-3.5 py-3 rounded-lg border hairline bg-card text-[15px] placeholder-ink/35"/></label>'+
+      '<label class="block mb-1"><span class="block text-[12.5px] font-medium text-ink/75 mb-1">Email</span>'+
+        '<input id="coEmail" type="email" autocomplete="email" maxlength="254" value="'+esc(field('email'))+'" placeholder="kamu@@email.com" class="w-full px-3.5 py-3 rounded-lg border hairline bg-card text-[15px] placeholder-ink/35"/></label>'+
+      '<p class="text-[11.5px] text-ink/45 mb-4">Tautan unduhan ebook dikirim ke email ini.</p>'+
+      '<span class="block text-[12.5px] font-medium text-ink/75 mb-2">Metode pembayaran</span>'+
+      '<div class="flex items-center gap-3 px-4 py-3 rounded-xl border hairline bg-card mb-5">'+
+        '<svg class="w-7 h-7 shrink-0" viewBox="0 0 24 24" fill="#0F3D3E"><path d="M7.5 3.5h6.2c2.5 0 4.3 1.3 4 3.9-.3 2.6-2.1 4-4.8 4H10l-.8 5.1H6.3L7.5 3.5z" opacity=".55"/><path d="M9.2 6.2h6.2c2.5 0 4.3 1.3 4 3.9-.3 2.6-2.1 4-4.8 4h-2.9l-.8 5.1H7.9L9.2 6.2z"/></svg>'+
+        '<span class="flex-1"><span class="block text-[14px] font-semibold leading-tight">PayPal</span><span class="block text-[12px] text-ink/55">Kartu kredit/debit atau saldo PayPal - ditagih '+CFG.currency+' '+usd().toFixed(2)+'</span></span>'+
+      '</div>'+
+      '<div class="rounded-xl border hairline bg-card p-4">'+
+        '<div class="font-mono uppercase tracking-[0.16em] text-[10.5px] text-ink/45 mb-2">Ringkasan pesanan</div>'+
+        items+
+        (discount()>0 ? '<div class="flex justify-between text-[13px] text-teal-700 py-1"><span>Diskon ('+promo.code+')</span><span>- '+fmt(discount())+'</span></div>' : '')+
+        '<div class="flex justify-between items-baseline pt-2 mt-1 border-t hairline"><span class="font-semibold text-[14px]">Total</span><span class="font-display text-[19px] font-semibold">'+fmt(total())+'</span></div>'+
+      '</div>'+
+      '<p id="coErr" class="text-[12.5px] text-terra-600 font-medium mt-3 hidden">Lengkapi nama dan email yang valid dulu ya.</p>'+
+    '</div>';
+  }
+
+  function checkoutFootHtml(){
+    if(!CFG.paypalEnabled){
+      return '<div class="py-4 border-t hairline"><div class="rounded-xl bg-paper text-ink/70 text-[12.5px] p-3 text-center leading-relaxed">Checkout PayPal belum aktif. Setel kredensial PayPal di server (bagian <span class="font-mono">PayPal</span> pada konfigurasi) untuk mengaktifkan pembayaran.</div></div>';
+    }
+    return '<div class="py-4 border-t hairline">'+
+      '<div id="paypal-button-container" class="min-h-[46px]"></div>'+
+      '<p id="payErr" class="text-[12.5px] text-terra-600 font-medium mt-2 hidden"></p>'+
+      '<p class="text-center text-[11.5px] text-ink/45 mt-2.5 flex items-center justify-center gap-1.5"><svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="11" width="18" height="10" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>Pembayaran aman &amp; terenkripsi via PayPal</p>'+
+    '</div>';
+  }
+
+  function doneBodyHtml(){
+    return '<div class="flex flex-col items-center text-center py-12">'+
+      '<div class="w-16 h-16 rounded-full bg-teal-50 text-teal-700 flex items-center justify-center mb-5"><svg class="w-8 h-8" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6 9 17l-5-5"/></svg></div>'+
+      '<h4 class="font-display text-[26px] font-semibold leading-tight">Pesanan diterima!</h4>'+
+      '<p class="text-[14px] text-ink/65 mt-2 max-w-[300px]">Tautan unduhan sudah kami kirim ke <span class="font-semibold text-ink">'+esc(lastOrder.email)+'</span>. Cek inbox (atau folder promosi) ya.</p>'+
+      '<div class="mt-6 w-full rounded-xl border hairline bg-card p-4 text-left">'+
+        '<div class="flex justify-between text-[13px] text-ink/60 py-1"><span>No. pesanan</span><span class="font-mono font-semibold text-ink">'+esc(lastOrder.no)+'</span></div>'+
+        '<div class="flex justify-between text-[13px] text-ink/60 py-1"><span>Total dibayar</span><span class="font-display text-[16px] font-semibold text-ink">'+fmt(lastOrder.total)+'</span></div>'+
+      '</div>'+
+    '</div>';
+  }
+  function doneFootHtml(){
+    return '<div class="py-4 border-t hairline"><button data-act="done-close" class="w-full py-3.5 rounded-full bg-teal-600 text-parch font-semibold hover:bg-teal-700 transition">Selesai</button></div>';
+  }
+
+  // Preserve typed name/email across re-renders of the checkout step.
+  var fields = {name:'', email:''};
+  function field(k){ return fields[k]||''; }
+  function snapshotFields(){
+    var n=document.getElementById('coName'); var e=document.getElementById('coEmail');
+    if(n) fields.name=n.value; if(e) fields.email=e.value;
+  }
+
+  function render(){
+    updateBadge();
+    var ids = Object.keys(cart);
+    if(step==='done' && lastOrder){
+      titleEl.textContent='Terima kasih!'; subEl.textContent='Pembayaran berhasil';
+      bodyEl.innerHTML = doneBodyHtml(); footEl.innerHTML = doneFootHtml();
+      return;
+    }
+    if(step==='checkout'){
+      titleEl.textContent='Pembayaran'; subEl.textContent='Langkah 2 dari 2';
+      bodyEl.innerHTML = checkoutBodyHtml(); footEl.innerHTML = checkoutFootHtml();
+      paypalRendered = false;
+      mountPayPal();
+      return;
+    }
+    titleEl.textContent='Keranjang'; subEl.textContent = count()+' item';
+    if(ids.length===0){ bodyEl.innerHTML = emptyHtml(); footEl.innerHTML=''; return; }
+    bodyEl.innerHTML = ids.map(function(id){ return row(catalog[id], cart[id]); }).join('');
+    footEl.innerHTML = cartFootHtml();
+  }
+
+  function showCoErr(){ var e=document.getElementById('coErr'); if(e) e.classList.remove('hidden'); }
+  function showPayErr(msg){ var e=document.getElementById('payErr'); if(e){ e.textContent=msg; e.classList.remove('hidden'); } }
+
+  function mountPayPal(){
+    if(!CFG.paypalEnabled || !window.paypal || paypalRendered) return;
+    var container = document.getElementById('paypal-button-container');
+    if(!container) return;
+    paypalRendered = true;
+    window.paypal.Buttons({
+      style:{ shape:'pill', color:'gold', layout:'vertical', label:'pay', height:46 },
+      onClick: function(data, actions){
+        snapshotFields();
+        if(!fields.name || fields.name.trim().length<2 || !validEmail(fields.email.trim())){
+          showCoErr(); return actions.reject();
+        }
+        return actions.resolve();
+      },
+      createOrder: function(){
+        var items = Object.keys(cart).map(function(id){ return {id:id, qty:cart[id]}; });
+        return fetch('/api/checkout/create-order', {
+          method:'POST',
+          headers:{'Content-Type':'application/json','X-CSRF-TOKEN':csrf()},
+          body: JSON.stringify({ items:items, name:fields.name.trim(), email:fields.email.trim(), promoCode: promo?promo.code:null })
+        }).then(function(r){ return r.json().then(function(d){ if(!r.ok) throw new Error((d && d.error) || 'Gagal memulai pembayaran.'); return d.id; }); });
+      },
+      onApprove: function(data){
+        return fetch('/api/checkout/capture-order', {
+          method:'POST',
+          headers:{'Content-Type':'application/json','X-CSRF-TOKEN':csrf()},
+          body: JSON.stringify({ payPalOrderId: data.orderID })
+        }).then(function(r){ return r.json().then(function(d){
+          if(!r.ok) throw new Error((d && d.error) || 'Pembayaran gagal diproses.');
+          lastOrder = { no:d.orderNumber, email:d.email, total:d.totalIdr };
+          cart = {}; persist(); promo=null; promoErr=false; step='done'; render();
+        }); });
+      },
+      onError: function(err){ showPayErr('Terjadi kesalahan saat memproses pembayaran. Silakan coba lagi.'); }
+    }).render('#paypal-button-container');
+  }
+
+  function openDrawer(){ overlay.classList.add('open'); drawer.classList.add('open'); drawer.setAttribute('aria-hidden','false'); document.body.style.overflow='hidden'; render(); }
+  function closeDrawer(){ overlay.classList.remove('open'); drawer.classList.remove('open'); drawer.setAttribute('aria-hidden','true'); document.body.style.overflow=''; if(step!=='done') step='cart'; promoErr=false; }
+
+  function add(id){
+    if(!catalog[id]) return;
+    cart[id] = (cart[id]||0) + 1; persist();
+    updateBadge();
+    cartBtn.classList.remove('cartbtn-bump'); void cartBtn.offsetWidth; cartBtn.classList.add('cartbtn-bump');
+    step='cart'; openDrawer();
+  }
+
+  document.querySelectorAll('.add-cart').forEach(function(btn){
+    btn.addEventListener('click', function(){ add(btn.getAttribute('data-id')); });
+  });
+
+  drawer.addEventListener('click', function(e){
+    var t = e.target.closest('[data-act]'); if(!t) return;
+    var act = t.getAttribute('data-act'); var id = t.getAttribute('data-id');
+    if(act==='inc'){ cart[id]++; persist(); render(); }
+    else if(act==='dec'){ cart[id]--; if(cart[id]<=0) delete cart[id]; persist(); render(); }
+    else if(act==='rem'){ delete cart[id]; persist(); render(); }
+    else if(act==='browse'){ closeDrawer(); var s=document.getElementById('ebooks'); if(s) window.scrollTo({top:s.offsetTop-70, behavior:'smooth'}); }
+    else if(act==='promo'){
+      var v=(document.getElementById('promoInput').value||'').trim().toUpperCase();
+      if(v===(CFG.promoCode||'').toUpperCase()){ promo={code:CFG.promoCode, rate:.10}; promoErr=false; }
+      else { promo=null; promoErr=(v!==''); }
+      render();
+    }
+    else if(act==='checkout'){ if(Object.keys(cart).length){ step='checkout'; render(); bodyEl.scrollTop=0; } }
+    else if(act==='back'){ snapshotFields(); step='cart'; render(); }
+    else if(act==='done-close'){ step='cart'; closeDrawer(); render(); }
+  });
+
+  // Keep typed fields if the user edits then blurs (covers PayPal popup focus loss).
+  drawer.addEventListener('input', function(e){
+    if(e.target && (e.target.id==='coName' || e.target.id==='coEmail')) snapshotFields();
+  });
+
+  cartBtn.addEventListener('click', function(){ if(step==='done'){ step='cart'; } openDrawer(); });
+  document.getElementById('cartClose').addEventListener('click', closeDrawer);
+  overlay.addEventListener('click', closeDrawer);
+  document.addEventListener('keydown', function(e){ if(e.key==='Escape' && drawer.classList.contains('open')) closeDrawer(); });
+
+  var filters = document.getElementById('ebookFilters');
+  if(filters){
+    filters.addEventListener('click', function(e){
+      var b = e.target.closest('[data-filter]'); if(!b) return;
+      var f = b.getAttribute('data-filter');
+      filters.querySelectorAll('[data-filter]').forEach(function(c){
+        var on = c===b;
+        c.classList.toggle('bg-teal-600', on); c.classList.toggle('text-parch', on); c.classList.toggle('border-teal-600', on);
+        c.classList.toggle('bg-card', !on); c.classList.toggle('text-ink/70', !on); c.classList.toggle('hairline', !on);
+      });
+      var shown=0;
+      document.querySelectorAll('.ebook-card[data-cat]').forEach(function(card){
+        var ok = (f==='all' || card.getAttribute('data-cat')===f);
+        card.style.display = ok ? '' : 'none'; if(ok) shown++;
+      });
+      var emp=document.getElementById('ebookEmpty'); if(emp) emp.classList.toggle('hidden', shown!==0);
+    });
+  }
+
+  updateBadge();
+})();
+</script>
+
+<script>
+(function(){
+  var KEY='check-theme', root=document.documentElement;
+  function apply(t){ root.setAttribute('data-theme', t); try{ localStorage.setItem(KEY, t); }catch(e){} }
+  var btn=document.getElementById('themeToggle');
+  if(btn){ btn.addEventListener('click', function(){
+    var cur = root.getAttribute('data-theme')==='dark' ? 'dark' : 'light';
+    apply(cur==='dark' ? 'light' : 'dark');
+  }); }
+})();
+</script>
+
+<!-- ============== LANGUAGE (ID ⇄ EN) ============== -->
+<script>
+(function(){
+  var LKEY='check-lang';
+  var thumb=document.getElementById('langThumb');
+  var opts=document.querySelectorAll('#langToggle .lang-opt');
+  if(!thumb||!opts.length) return;
+
+  // Indonesian source phrase -> English. Phrases not listed stay unchanged (brand names, numbers, codes).
+  var DICT = {
+    // top strip + header
+    'Buka hari ini · 09.00–21.00 WIB':'Open today · 09:00–21:00 WIB',
+    'Trial gratis 1 jam — tanpa biaya, tanpa keterikatan':'1-hour free trial — no cost, no commitment',
+    'Login Siswa':'Student Login',
+    'Pengajar':'Teachers','Tentang':'About','Lokasi':'Locations','Ebook':'Ebooks',
+    'Daftar Trial Gratis':'Start Free Trial',
+    // hero
+    'Intake Mei–Juni 2026 · Slot terbatas':'May–June 2026 intake · Limited seats',
+    'Capai':'Reach','untuk':'for','kuliah,':'study,','kerja,':'work,',
+    'atau imigrasi ke luar negeri.':'or emigrating abroad.',
+    'Pengajar bersertifikat CELTA & TESOL, kelas maksimal 1:8, dan mock test mingguan dengan format ujian asli — supaya kamu masuk hari ujian dengan tenang, bukan tebak-tebakan.':'CELTA & TESOL-certified teachers, classes capped at 1:8, and weekly mock tests in the real exam format — so you walk into exam day calm, not guessing.',
+    'Lihat Program':'View Programs',
+    '1 jam · tanpa biaya · tanpa keterikatan. Kami WA dalam 30 menit di jam kerja.':"1 hour · no cost · no commitment. We'll WhatsApp you within 30 minutes during working hours.",
+    'siswa lulus':'students scoring','band 7 atau lebih':'band 7 or higher',
+    'capai target':'hit their target','di percobaan ke-1/2':'on the 1st/2nd attempt',
+    'rasio guru':'teacher ratio','per kelas, maks.':'per class, max.',
+    'mengajar':'teaching','Partner resmi —':'Official partners —',
+    // demo form
+    'Isi sebentar — kami WA dalam 30 menit.':"Takes a minute — we'll WhatsApp you within 30 minutes.",
+    'Nama lengkap':'Full name','Nomor HP / WhatsApp':'Phone / WhatsApp number',
+    'Belum yakin — bantu pilih':'Not sure — help me choose',
+    'Cabang / Kota':'Branch / City',
+    'Saya setuju dihubungi terkait pendaftaran ini. We don\u2019t spam — kamu bisa unsubscribe kapan saja.':'I agree to be contacted about this registration. We don\u2019t spam — you can unsubscribe anytime.',
+    "Saya setuju dihubungi terkait pendaftaran ini. We don't spam — kamu bisa unsubscribe kapan saja.":"I agree to be contacted about this registration. We don't spam — you can unsubscribe anytime.",
+    'Atau langsung WhatsApp':'Or WhatsApp us directly',
+    '42 siswa daftar minggu ini':'42 students signed up this week',
+    // why us
+    '— Kenapa pilih Sir Joshua':'— Why choose Sir Joshua',
+    'Bukan bimbel besar.':'Not a big cram school.',
+    'Studio kecil yang serius soal':'A small studio serious about',
+    'Kami tidak menjual janji palsu — kami menjual jam terbang, koreksi mendalam, dan kelas yang cukup kecil sehingga setiap siswa benar-benar bicara setiap sesi.':"We don't sell empty promises — we sell hours of practice, deep correction, and classes small enough that every student actually speaks every session.",
+    'Kelas kecil 1:8':'Small 1:8 classes',
+    'Maksimal 8 siswa. Banyak waktu speaking dan koreksi langsung — bukan kuliah satu arah.':'Maximum 8 students. Plenty of speaking time and live correction — not a one-way lecture.',
+    'Rata-rata 5 siswa per kelas':'Average 5 students per class',
+    'Pengajar bersertifikat':'Certified teachers',
+    'CELTA / TESOL trained dengan jam terbang IELTS, TOEFL, PTE — lokal dan native speaker.':'CELTA / TESOL trained with IELTS, TOEFL, PTE experience — local and native speakers.',
+    'Setiap pengajar diaudit per term':'Every teacher audited each term',
+    'Mock test mingguan':'Weekly mock tests',
+    'Format ujian asli — Listening, Reading, Writing, Speaking. Plus feedback tertulis.':'Real exam format — Listening, Reading, Writing, Speaking. Plus written feedback.',
+    'Setiap Sabtu, 09.00–13.00':'Every Saturday, 09:00–13:00',
+    'Setelah lulus IELTS, kami bantu pemilihan kampus, esai, dan konsultasi visa.':'After you pass IELTS, we help with campus selection, essays, and visa consulting.',
+    'Termasuk untuk siswa Sir Joshua':'Included for Sir Joshua students',
+    // programs
+    '— Program kami':'— Our programs',
+    'Pilih jalur sesuai tujuanmu.':'Choose the path that fits your goal.',
+    'Bandingkan semua program →':'Compare all programs →',
+    'Paling populer':'Most popular','kuliah':'study',
+    'Untuk masuk universitas di Australia, UK, Kanada, NZ, US.':'For university admission in Australia, UK, Canada, NZ, US.',
+    'Durasi':'Duration','Hybrid · maks 1:8':'Hybrid · max 1:8',
+    'Mulai dari':'Starting from','/bln':'/mo','Cicilan 0% · 6 bulan':'0% installments · 6 months',
+    'Lihat detail →':'View details →',
+    'kerja · imigrasi':'work · immigration',
+    'Untuk PR, working visa, dan training di luar negeri.':'For PR, working visas, and training abroad.',
+    'kuliah US · kerja':'US study · work',
+    'Computer-based, integrated skills — favorit untuk universitas US.':'Computer-based, integrated skills — a favorite for US universities.',
+    'Target skor':'Target score','cepat · australia/nz':'fast · australia/nz',
+    'Hasil cepat (48 jam), AI scoring — pilihan untuk applicant Australia / NZ.':'Fast results (48 hrs), AI scoring — the pick for Australia / NZ applicants.',
+    'karir · profesional':'career · professional',
+    'Meeting, negotiation, email & presentation untuk profesional Indonesia.':'Meetings, negotiation, email & presentations for Indonesian professionals.',
+    '12 minggu (rolling)':'12 weeks (rolling)','Evening · maks 1:6':'Evening · max 1:6',
+    '8 / 12 / 16 minggu':'8 / 12 / 16 weeks','8 / 12 minggu':'8 / 12 weeks',
+    '10 / 14 minggu':'10 / 14 weeks','6 / 10 minggu':'6 / 10 weeks',
+    '→ tidak yakin?':'→ not sure?',
+    'Tes diagnostik gratis, 30 menit.':'Free diagnostic test, 30 minutes.',
+    'Kami pahami level kamu sekarang dulu — baru rekomendasikan program dan timeline yang realistis.':'We get to know your current level first — then recommend a realistic program and timeline.',
+    'Mulai tes diagnostik':'Start the diagnostic test',
+    // how we teach
+    '— Cara kami mengajar':'— How we teach',
+    'Lima langkah,':'Five steps,','tanpa':'without',
+    'Setiap siswa Sir Joshua melewati lima tahap yang sama — dari diagnosa awal sampai bantuan booking ujian dan pendaftaran kampus.':'Every Sir Joshua student goes through the same five stages — from initial diagnosis to exam-booking help and campus applications.',
+    'Tes diagnostik gratis':'Free diagnostic test',
+    'Speaking, listening, reading, writing — supaya kami tahu titik mulaimu.':'Speaking, listening, reading, writing — so we know your starting point.',
+    'Rencana belajar personal':'Personal study plan',
+    'Target band, jadwal, dan timeline yang realistis berdasarkan ujian kamu.':'Target band, schedule, and a realistic timeline based on your exam.',
+    'Kelas + speaking 1-on-1':'Classes + 1-on-1 speaking',
+    'Kelas struktural plus sesi speaking mingguan dengan koreksi langsung.':'Structured classes plus weekly speaking sessions with live correction.',
+    'Format IELTS asli plus feedback tertulis dari examiner-style rater.':'Real IELTS format plus written feedback from examiner-style raters.',
+    'Booking ujian + visa':'Exam booking + visa',
+    'Bantu booking British Council / IDP, plus konsultasi kampus dan visa.':'Help booking British Council / IDP, plus campus and visa consulting.',
+    // faculty
+    '— Pengajar kami':'— Our teachers',
+    'Tim yang sudah':'A team that has','duduk di kursi ujian':'sat in the exam seat',
+    'sebanyak kamu akan duduk.':'as many times as you will.',
+    'Lihat semua pengajar →':'See all teachers →',
+    '9 thn':'9 yrs','12 thn':'12 yrs','7 thn':'7 yrs','14 thn':'14 yrs',
+    // results
+    '— Hasil siswa kami':'— Our student results',
+    'Hasil terbaru,':'The latest results,','apa adanya':'as they are',
+    'Update bulan':'Updated',
+    'IELTS Academic · 14 minggu':'IELTS Academic · 14 weeks',
+    'Diterima di':'Accepted at',
+    'PTE Academic · 8 minggu':'PTE Academic · 8 weeks',
+    'IELTS General · 12 minggu':'IELTS General · 12 weeks',
+    'Catatan: hasil di atas adalah sampel terbaru dari periode April 2026. Kami publikasikan ulang setiap akhir bulan — dengan izin tertulis dari masing-masing siswa.':'Note: the results above are a recent sample from April 2026. We republish them at the end of each month — with written permission from each student.',
+    // testimonials
+    '— Apa kata siswa kami':'— What our students say',
+    'Cerita yang membuat kami':'The stories that keep us',
+    'tetap mengajar di hari Sabtu pagi.':'teaching on Saturday mornings.',
+    'Speaking saya naik dari 5.5 ke 7.5 dalam 10 minggu. Pak Adit koreksi pelan-pelan, jadi enggak takut salah.':"My Speaking went from 5.5 to 7.5 in 10 weeks. Pak Adit corrects you gently, so you're not afraid to make mistakes.",
+    'Mock test mingguan bikin hari ujian asli rasanya cuma "another Saturday". Tahu persis mau ngapain.':'The weekly mock tests made the real exam day feel like just "another Saturday". I knew exactly what to do.',
+    'Kelasnya kecil, jadi enggak bisa ngumpet. Setiap sesi pasti speaking — itu game changer buat saya.':"The classes are small, so you can't hide. Every session you speak — that was a game changer for me.",
+    // ebooks
+    '— Toko ebook':'— Ebook store',
+    'Lanjutkan belajar':'Keep learning','di rumah, dengan':'at home, at an',
+    'harga terjangkau':'affordable price',
+    'Panduan, latihan soal, dan strategi langsung dari pengajar Sir Joshua — dikirim ke email kamu dalam format PDF & EPUB, bisa dibaca di perangkat apa saja.':'Guides, practice questions, and strategies straight from Sir Joshua teachers — delivered to your email in PDF & EPUB, readable on any device.',
+    'Semua':'All','Umum':'General','Terlaris':'Best seller','Baru':'New','Tambah':'Add',
+    '248 hal · PDF + EPUB':'248 pp · PDF + EPUB','180 hal · PDF':'180 pp · PDF',
+    '312 hal · PDF + EPUB':'312 pp · PDF + EPUB','156 hal · PDF':'156 pp · PDF',
+    '210 hal · PDF + EPUB':'210 pp · PDF + EPUB','132 hal · PDF':'132 pp · PDF',
+    'Kerangka jawaban Task 1 & 2 untuk konsisten di band 7+.':'Answer frameworks for Task 1 & 2 to stay consistent at band 7+.',
+    'Latihan fluency dan contoh jawaban Part 1–3 yang natural.':'Fluency drills and natural sample answers for Parts 1–3.',
+    'Strategi integrated tasks untuk reading, listening & speaking.':'Integrated-task strategies for reading, listening & speaking.',
+    'Teknik menembus skor 79+ dengan format AI scoring PTE.':"Techniques to break 79+ with PTE's AI scoring format.",
+    'Umum · Vocabulary':'General · Vocabulary',
+    '1.200 kata akademik tersering, lengkap dengan contoh kalimat.':'The 1,200 most common academic words, complete with example sentences.',
+    'Teknik skimming & scanning untuk hemat waktu di ujian.':'Skimming & scanning techniques to save time in the exam.',
+    '(128 ulasan)':'(128 reviews)','(96 ulasan)':'(96 reviews)','(74 ulasan)':'(74 reviews)',
+    '(61 ulasan)':'(61 reviews)','(203 ulasan)':'(203 reviews)','(54 ulasan)':'(54 reviews)',
+    'Belum ada ebook di kategori ini.':'No ebooks in this category yet.',
+    // bundle
+    '— Paket hemat':'— Value bundle',
+    'Paket Lengkap Band 8 — 6 ebook sekaligus.':'Complete Band 8 Bundle — 6 ebooks at once.',
+    'Semua panduan IELTS, TOEFL, PTE, dan vocabulary dalam satu paket. Hemat Rp 185.000 dibanding beli satuan.':'All the IELTS, TOEFL, PTE, and vocabulary guides in one bundle. Save Rp 185,000 versus buying separately.',
+    'Tambah paket':'Add bundle',
+    // locations
+    '— Cabang kami':'— Our branches',
+    'Hadir di Jakarta, Bandung, & Surabaya.':'In Jakarta, Bandung, & Surabaya.',
+    'Datang langsung untuk demo, atau ikut kelas online via Zoom dari mana saja di Indonesia.':'Come in for a demo, or join online classes via Zoom from anywhere in Indonesia.',
+    'Buka sekarang':'Open now','Senin–Sabtu':'Mon–Sat','Minggu':'Sunday',
+    'Buka di Maps →':'Open in Maps →','Soon · Juni 2026':'Soon · June 2026',
+    'Daftar waitlist':'Join waitlist','Sudah buka':'Now open','Lihat lokasi →':'View location →',
+    '— Sertifikasi & afiliasi':'— Certifications & affiliations',
+    '— Pembayaran & cicilan 0%':'— Payment & 0% installments',
+    'Cicilan 0%':'0% installments',
+    'Cicilan 0% tersedia hingga 12 bulan dengan kartu kredit BCA, Mandiri, dan BRI. Virtual account dan QRIS juga tersedia.':'0% installments available up to 12 months with BCA, Mandiri, and BRI credit cards. Virtual account and QRIS also available.',
+    // faq
+    '— Pertanyaan yang sering ditanyakan':'— Frequently asked questions',
+    'Jawaban jujur,':'Honest answers,',
+    'Belum terjawab?':'Still have questions?','WhatsApp tim kami':'WhatsApp our team',
+    '— biasanya dijawab dalam 30 menit di jam kerja.':'— usually answered within 30 minutes during working hours.',
+    'Berapa lama waktu untuk mencapai band 7?':'How long does it take to reach band 7?',
+    'Tergantung level awal. Dari band 5.5, biasanya 8–12 minggu intensif. Kami beri estimasi pasti setelah tes diagnostik gratis — termasuk skill mana yang harus diperkuat lebih dulu.':"It depends on your starting level. From band 5.5, it's usually 8–12 intensive weeks. We give a firm estimate after the free diagnostic test — including which skill to strengthen first.",
+    'Apakah ada jaminan band score?':'Is there a band score guarantee?',
+    'Kami tidak menjual janji palsu. Tapi >90% siswa kami mencapai target band score mereka di percobaan pertama atau kedua. Kalau belum tercapai, kami beri kelas tambahan gratis — bukan refund yang tidak realistis.':"We don't sell false promises. But >90% of our students reach their target band score on the first or second attempt. If you don't, we give free extra classes — not an unrealistic refund.",
+    'Apakah pengajar native speaker?':'Are the teachers native speakers?',
+    'Sebagian iya. Kami juga punya pengajar Indonesia bersertifikat CELTA / TESOL — banyak siswa lebih nyaman mulai dengan pengajar lokal lalu pindah ke native saat speaking sudah lancar.':'Some are. We also have Indonesian teachers certified in CELTA / TESOL — many students feel more comfortable starting with a local teacher then moving to a native speaker once their speaking is fluent.',
+    'Bagaimana jika saya tidak bisa hadir di kelas?':"What if I can't attend a class?",
+    'Setiap kelas direkam — kamu bisa tonton ulang kapan saja di portal siswa. Kami juga jadwalkan kelas pengganti dengan grup level setara.':'Every class is recorded — you can rewatch anytime in the student portal. We also schedule make-up classes with a group at the same level.',
+    'Bisakah dibantu booking ujian IELTS resmi?':'Can you help book the official IELTS exam?',
+    'Ya — kami partner dengan British Council dan IDP. Kami bantu pilih center, tanggal, dan jenis ujian (Computer-based atau Paper-based) sesuai timeline kamu.':'Yes — we partner with British Council and IDP. We help you pick the center, date, and exam type (Computer-based or Paper-based) to fit your timeline.',
+    'Apakah ada kelas online?':'Are there online classes?',
+    'Iya, kami punya kelas hybrid — kamu bisa pilih offline di centre kami atau live online via Zoom. Banyak siswa kami pakai keduanya bergantian.':'Yes, we have hybrid classes — you can choose offline at our centre or live online via Zoom. Many of our students alternate between both.',
+    'Apa beda IELTS Academic dan General Training?':"What's the difference between IELTS Academic and General Training?",
+    'Academic untuk kuliah; General untuk kerja, imigrasi, atau training. Kami bantu memilih yang sesuai dengan tujuan kamu di sesi konsultasi.':'Academic is for study; General is for work, immigration, or training. We help you choose the right one for your goal in a consultation session.',
+    'Apakah pembayaran bisa dicicil?':'Can I pay in installments?',
+    'Iya — kami terima cicilan 0% dengan beberapa bank (BCA, Mandiri, BRI), serta pembayaran QRIS dan virtual account.':'Yes — we accept 0% installments with several banks (BCA, Mandiri, BRI), plus QRIS and virtual account payments.',
+    // final CTA
+    '— Siap mulai?':'— Ready to start?',
+    'Trial gratis 1 jam.':'1-hour free trial.',
+    'Tanpa biaya, tanpa keterikatan.':'No cost, no commitment.',
+    'Datang ke salah satu cabang kami atau ikut online. Kami pelajari level kamu, buat plan, baru kamu putuskan mau lanjut atau tidak.':'Visit one of our branches or join online. We assess your level, build a plan, and then you decide whether to continue.',
+    'Daftar Trial Gratis →':'Start Free Trial →',
+    'Atau telepon (021) 5099-9000 · Senin–Sabtu 09.00–21.00 WIB':'Or call (021) 5099-9000 · Mon–Sat 09:00–21:00 WIB',
+    // footer
+    'Kursus IELTS, TOEFL, PTE, dan Business English untuk siswa Indonesia yang serius soal kuliah, kerja, dan imigrasi ke luar negeri.':'IELTS, TOEFL, PTE and Business English courses for Indonesian students serious about studying, working and emigrating abroad.',
+    'Trial Gratis →':'Free Trial →',
+    'Cerita kami':'Our story','Lokasi cabang':'Branch locations','Hasil siswa':'Student results',
+    'Bantuan':'Help','Hubungi kami':'Contact us','Trial gratis':'Free trial','Kontak':'Contact',
+    'Sen–Sab · 09.00–21.00 WIB':'Mon–Sat · 09:00–21:00 WIB',
+    '© 2026 Sir Joshua Academy. Semua hak dilindungi.':'© 2026 Sir Joshua Academy. All rights reserved.',
+    'Kebijakan Privasi':'Privacy Policy','Syarat & Ketentuan':'Terms & Conditions',
+    // cart drawer (dynamic)
+    'Keranjang':'Cart','Pembayaran':'Payment',
+    'Terima kasih!':'Thank you!','Pembayaran berhasil':'Payment successful',
+    'Langkah 2 dari 2':'Step 2 of 2',
+    'Keranjang masih kosong':'Your cart is empty',
+    'Tambahkan ebook untuk mulai belajar di rumah.':'Add an ebook to start learning at home.',
+    'Lihat koleksi ebook':'Browse the ebook collection',
+    'Terapkan':'Apply','Kode promo tidak valid.':'Invalid promo code.','Diskon':'Discount',
+    'Lanjut ke pembayaran →':'Continue to payment →',
+    'Dikirim ke email · format PDF & EPUB · akses selamanya':'Sent to email · PDF & EPUB format · lifetime access',
+    '← Kembali ke keranjang':'← Back to cart',
+    'Tautan unduhan ebook dikirim ke email ini.':'The ebook download link is sent to this email.',
+    'Metode pembayaran':'Payment method',
+    'Scan & bayar dari e-wallet apa saja':'Scan & pay from any e-wallet',
+    'Transfer Bank (Virtual Account)':'Bank Transfer (Virtual Account)',
+    'Kartu Kredit / Debit':'Credit / Debit Card',
+    'Visa · Mastercard · cicilan 0%':'Visa · Mastercard · 0% installments',
+    'Ringkasan pesanan':'Order summary',
+    'Lengkapi nama dan email yang valid dulu ya.':'Please enter a valid name and email first.',
+    'Pembayaran aman & terenkripsi':'Secure & encrypted payment',
+    'Pesanan diterima!':'Order received!',
+    'Tautan unduhan sudah kami kirim ke ':"We've sent the download link to ",
+    '. Cek inbox (atau folder promosi) ya.':'. Check your inbox (or promotions folder).',
+    'No. pesanan':'Order no.','Total dibayar':'Total paid','Selesai':'Done',
+    // placeholders
+    'cth. Putri Ramadhani':'e.g. Putri Ramadhani','kamu@@email.com':'you@@email.com',
+    'Kode promo (SIRJOSHUA10)':'Promo code (SIRJOSHUA10)'
+  };
+  var RULES = [
+    { re:/^(\d+) item$/, to:function(m){ return m[1]+(m[1]==='1'?' item':' items'); } },
+    { re:/^Bayar (Rp .+)$/, to:'Pay $1' },
+    { re:/^Diskon \((\S+)\)$/, to:'Discount ($1)' }
+  ];
+
+  var LANG='id';
+  var origMap = new WeakMap();
+  function parts(s){ return s.match(/^(\s*)([\s\S]*?)(\s*)$/); }
+  function lookup(core){
+    if(Object.prototype.hasOwnProperty.call(DICT, core)) return DICT[core];
+    for(var i=0;i<RULES.length;i++){ var mm=core.match(RULES[i].re); if(mm){ return typeof RULES[i].to==='function' ? RULES[i].to(mm) : core.replace(RULES[i].re, RULES[i].to); } }
+    return null;
+  }
+  function textNodes(root){
+    if(root.nodeType===3) return [root];
+    if(root.nodeType!==1) return [];
+    var out=[];
+    var w=document.createTreeWalker(root, NodeFilter.SHOW_TEXT, { acceptNode:function(n){
+      if(!n.nodeValue || !n.nodeValue.trim()) return NodeFilter.FILTER_REJECT;
+      var p=n.parentNode; if(!p) return NodeFilter.FILTER_REJECT;
+      var nm=p.nodeName;
+      if(nm==='SCRIPT'||nm==='STYLE'||nm==='TEXTAREA') return NodeFilter.FILTER_REJECT;
+      if(p.closest && p.closest('#langToggle')) return NodeFilter.FILTER_REJECT;
+      return NodeFilter.FILTER_ACCEPT;
+    }});
+    while(w.nextNode()) out.push(w.currentNode);
+    return out;
+  }
+  function applyText(n){
+    if(!origMap.has(n)) origMap.set(n, n.nodeValue);
+    var orig=origMap.get(n), m=parts(orig), out=orig;
+    if(LANG==='en'){ var t=lookup(m[2]); if(t!=null) out=m[1]+t+m[3]; }
+    if(n.nodeValue!==out) n.nodeValue=out;
+  }
+  function handlePh(el){
+    if(el.__ph==null) el.__ph=el.getAttribute('placeholder');
+    var t = LANG==='en' ? lookup(el.__ph) : null;
+    el.setAttribute('placeholder', t!=null ? t : el.__ph);
+  }
+  function applyAttrs(root){
+    if(root.nodeType!==1) return;
+    if(root.hasAttribute('placeholder')) handlePh(root);
+    root.querySelectorAll('[placeholder]').forEach(handlePh);
+  }
+  function applyTree(root){ textNodes(root).forEach(applyText); applyAttrs(root); }
+
+  var cfg={subtree:true, childList:true, characterData:true};
+  var mo=new MutationObserver(function(muts){
+    mo.disconnect();
+    muts.forEach(function(m){
+      if(m.type==='characterData'){
+        origMap.set(m.target, m.target.nodeValue);
+        applyText(m.target);
+      } else if(m.type==='childList'){
+        m.addedNodes.forEach(function(nd){ applyTree(nd); });
+      }
+    });
+    mo.takeRecords();
+    mo.observe(document.body, cfg);
+  });
+
+  function setLang(lang){
+    LANG=lang;
+    document.documentElement.setAttribute('lang', lang);
+    thumb.style.transform = lang==='id' ? 'translateX(34px)' : 'translateX(0)';
+    opts.forEach(function(o){
+      var on=o.getAttribute('data-lang')===lang;
+      o.classList.toggle('text-teal-800', on);
+      o.classList.toggle('text-parch/60', !on);
+    });
+    mo.disconnect();
+    applyTree(document.body);
+    mo.takeRecords();
+    mo.observe(document.body, cfg);
+    try{ localStorage.setItem(LKEY, lang); }catch(e){}
+  }
+
+  var saved;
+  try{ saved=localStorage.getItem(LKEY); }catch(e){}
+  setLang(saved==='en' ? 'en' : 'id');
+  opts.forEach(function(o){ o.addEventListener('click', function(){ setLang(o.getAttribute('data-lang')); }); });
+})();
+</script>
+</body>
+</html>
