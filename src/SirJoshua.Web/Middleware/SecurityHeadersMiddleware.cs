@@ -24,8 +24,10 @@ public class SecurityHeadersMiddleware
         "font-src 'self' https://fonts.gstatic.com data:; " +
         "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdn.jsdelivr.net; " +
         "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://cdn.jsdelivr.net https://www.paypal.com https://www.paypalobjects.com; " +
-        "connect-src 'self' https://www.paypal.com https://api-m.paypal.com https://api-m.sandbox.paypal.com; " +
-        "frame-src https://www.paypal.com https://www.sandbox.paypal.com;";
+        // PayPal's SDK makes XHR/telemetry calls to several *.paypal.com subdomains; allow the wildcard
+        // so live checkout isn't blocked by CSP. Still scoped to PayPal only.
+        "connect-src 'self' https://*.paypal.com; " +
+        "frame-src https://*.paypal.com https://*.sandbox.paypal.com;";
 
     public SecurityHeadersMiddleware(RequestDelegate next) => _next = next;
 

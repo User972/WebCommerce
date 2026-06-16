@@ -1,0 +1,93 @@
+@model SirJoshua.Web.ViewModels.HomeViewModel
+@{
+    var f = SiteContent.Flagship;
+}
+<!-- ============== HERO ============== -->
+<section class="relative overflow-hidden" aria-labelledby="hero-heading">
+  <div class="absolute inset-0 -z-10">
+    <div class="absolute inset-0 bg-surface"></div>
+    <div class="absolute -top-40 -left-40 w-[640px] h-[640px] rounded-full bg-teal-50/60 blur-2xl"></div>
+    <div class="absolute -bottom-40 -right-20 w-[520px] h-[520px] rounded-full bg-terra-400/15 blur-2xl"></div>
+    <div class="absolute inset-0 grain opacity-60"></div>
+  </div>
+
+  <div class="max-w-[1280px] mx-auto px-5 md:px-8 pt-12 md:pt-20 pb-16 md:pb-24 grid lg:grid-cols-12 gap-10 lg:gap-12 items-center">
+    <!-- Left: copy -->
+    <div class="lg:col-span-7">
+      <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-teal-50 text-teal-700 text-[12.5px] font-medium tracking-wide">
+        <span class="w-1.5 h-1.5 rounded-full bg-terra-500"></span>
+        IELTS Band 7 Plus™ · by Sir Joshua Academy
+      </div>
+      <h1 id="hero-heading" class="mt-5 font-display font-medium leading-[0.98] text-ink text-[40px] sm:text-[54px] lg:text-[66px]">
+        Achieve your IELTS<br/>target score with
+        <em class="not-italic text-terra-600">confidence.</em>
+      </h1>
+      <p class="mt-6 text-[17px] md:text-[18px] leading-relaxed text-ink/70 max-w-[560px]">
+        Practical resources, proven strategies and expert guidance designed to help you prepare
+        effectively for the IELTS exam — and reach Band&nbsp;7 or higher.
+      </p>
+
+      <div class="mt-8 flex flex-wrap items-center gap-3">
+        <a href="#formula" class="group inline-flex items-center gap-2 px-6 py-3.5 rounded-full bg-teal-600 text-parch font-semibold hover:bg-teal-700 transition">
+          Get the Band 7+ Formula
+          <svg class="w-4 h-4 transition-transform group-hover:translate-x-0.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M5 12h14M13 5l7 7-7 7"/></svg>
+        </a>
+        <button type="button" data-enquiry="strategy-consultation" data-interest="Strategy Consultation" data-item="strategy-consultation" class="inline-flex items-center gap-2 px-6 py-3.5 rounded-full border hairline bg-card/60 hover:bg-card text-ink font-semibold transition">
+          Book a Strategy Consultation
+        </button>
+      </div>
+      <p class="mt-3 text-[13.5px] text-ink/55">
+        Not ready to commit? <a href="#free-checklist" class="text-teal-700 font-semibold underline-hover">Download the Free IELTS Checklist →</a>
+      </p>
+
+      <!-- safe capability badges -->
+      <div class="mt-10 flex flex-wrap gap-2.5 max-w-[640px]">
+@foreach (var badge in new[] { "IELTS Writing Strategy", "Speaking Assessment", "Personalized Feedback", "Study Roadmap" })
+{
+        <span class="inline-flex items-center gap-2 px-3.5 py-2 rounded-full bg-card border hairline text-[13px] font-medium text-ink/75">
+          <svg class="w-3.5 h-3.5 text-teal-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M20 6 9 17l-5-5"/></svg>@badge
+        </span>
+}
+      </div>
+    </div>
+
+    <!-- Right: flagship product teaser card -->
+    <div class="lg:col-span-5">
+      <div class="relative">
+        <div class="absolute -top-3 -left-3 hidden md:block font-mono text-[11px] tracking-widest text-terra-600 rotate-[-4deg] bg-surface px-2 py-1 border hairline rounded">FLAGSHIP</div>
+        <div class="relative bg-card rounded-[20px] border hairline p-6 md:p-7 shadow-[0_30px_80px_-40px_rgba(15,61,62,.35)]">
+          <div class="flex items-start gap-4">
+            <div class="w-[92px] shrink-0">
+              <div class="ebook-cover cover-teal"><span class="spine"></span><span class="frame"></span>
+                <div class="inner"><span class="imprint">IELTS Band 7 Plus</span><div class="flex-1"></div><div class="rule"></div><span class="series">IELTS · Writing</span><div class="title" style="font-size:15px">The Band 7+ Formula</div></div>
+              </div>
+            </div>
+            <div class="min-w-0">
+              <div class="font-mono uppercase tracking-[0.16em] text-[10.5px] text-terra-600">Flagship product</div>
+              <h2 class="mt-1 font-display text-[20px] font-semibold leading-tight">IELTS Writing Mastery</h2>
+              <p class="mt-1.5 text-[13px] text-ink/60 leading-snug">A structured method for high-scoring Task 1 &amp; Task 2 responses.</p>
+            </div>
+          </div>
+          <ul class="mt-5 space-y-2 text-[13.5px] text-ink/75">
+@foreach (var o in f.LearningOutcomes.Take(3))
+{
+            <li class="flex items-start gap-2"><svg class="w-4 h-4 mt-0.5 text-teal-600 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M20 6 9 17l-5-5"/></svg>@o</li>
+}
+          </ul>
+          <div class="mt-5 pt-5 border-t hairline flex items-end justify-between gap-3">
+            <div>
+              <div class="text-[12px] text-ink/55 price-strike">@Money.Rp(f.RegularPriceIdr)</div>
+              <div class="price-launch text-[26px] text-ink leading-none">@Money.Rp(f.LaunchPriceIdr) <span class="text-[12px] font-sans font-medium text-terra-600 align-middle">Launch price</span></div>
+            </div>
+            <a href="#formula" class="inline-flex items-center gap-1 text-teal-700 font-semibold text-[14px] hover:gap-2 transition-all whitespace-nowrap">See details →</a>
+          </div>
+        </div>
+
+        <div class="absolute -bottom-5 -right-3 hidden md:flex items-center gap-2.5 bg-teal-700 text-parch rounded-full pl-3 pr-4 py-2 shadow-lg">
+          <svg class="w-4 h-4 text-terra-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M20 6 9 17l-5-5"/></svg>
+          <span class="text-[12.5px]">Designed around what examiners reward</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

@@ -1,0 +1,15 @@
+<!-- ============== CART DRAWER ============== -->
+<div id="cartOverlay" class="drawer-overlay"></div>
+<aside id="cartDrawer" class="cart-drawer" role="dialog" aria-modal="true" aria-hidden="true" aria-labelledby="drawerTitle">
+  <div class="flex items-center justify-between px-5 py-4 border-b hairline shrink-0">
+    <div>
+      <h3 class="font-display text-[22px] font-semibold leading-none" id="drawerTitle">Cart</h3>
+      <p class="text-[12px] text-ink/55 mt-1.5" id="drawerSub">0 items</p>
+    </div>
+    <button id="cartClose" aria-label="Close" class="w-9 h-9 rounded-full border hairline flex items-center justify-center text-ink/60 hover:text-ink hover:border-teal-600 transition">
+      <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6 6 18M6 6l12 12"/></svg>
+    </button>
+  </div>
+  <div id="cartBody" class="flex-1 overflow-y-auto no-bar px-5"></div>
+  <div id="cartFooter" class="shrink-0 px-5"></div>
+</aside>

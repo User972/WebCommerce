@@ -1,0 +1,36 @@
+@model SirJoshua.Web.ViewModels.HomeViewModel
+<!-- ============== FINAL CTA BAND ============== -->
+<section class="py-16 md:py-24 bg-teal-700 text-parch relative overflow-hidden" aria-labelledby="final-heading">
+  <!-- backdrop: terra blur blob + grain overlay (mirrors Hero / solution band) -->
+  <div class="absolute inset-0 -z-0 pointer-events-none">
+    <div class="absolute -top-32 -right-24 w-[560px] h-[560px] rounded-full bg-terra-400/20 blur-2xl"></div>
+    <div class="absolute -bottom-40 -left-32 w-[480px] h-[480px] rounded-full bg-teal-500/25 blur-2xl"></div>
+    <div class="absolute inset-0 grain opacity-50"></div>
+  </div>
+
+  <div class="relative z-10 max-w-[1280px] mx-auto px-5 md:px-8">
+    <div class="max-w-[860px]">
+      <div class="font-mono uppercase tracking-[0.18em] text-[11.5px] text-terra-400">— Take the next step</div>
+      <h2 id="final-heading" class="mt-3 font-display text-[36px] md:text-[56px] font-medium leading-[1.02] text-parch">
+        Your IELTS score can open doors to education, career advancement and international opportunities.
+      </h2>
+      <p class="mt-5 text-[16.5px] md:text-[18px] leading-relaxed text-parch/75 max-w-[680px]">
+        Take the next step with practical resources and professional guidance designed to help you
+        prepare effectively and achieve your target score.
+      </p>
+
+      <div class="mt-9 flex flex-wrap gap-3">
+        <a href="#formula" class="group inline-flex items-center gap-2 px-6 py-3.5 rounded-full bg-terra-500 text-white font-semibold hover:bg-terra-600 transition shadow-[0_12px_28px_-14px_rgba(217,119,87,.9)]">
+          Get the Band 7+ Formula
+          <svg class="w-4 h-4 transition-transform group-hover:translate-x-0.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M5 12h14M13 5l7 7-7 7"/></svg>
+        </a>
+        <button type="button" data-enquiry="strategy-consultation" data-interest="Strategy Consultation" data-item="strategy-consultation" class="inline-flex items-center gap-2 px-6 py-3.5 rounded-full bg-parch text-teal-800 font-semibold hover:bg-white transition">
+          Book Strategy Consultation
+        </button>
+        <a href="#free-checklist" class="inline-flex items-center gap-2 px-6 py-3.5 rounded-full border border-parch/25 text-parch font-semibold hover:bg-parch/10 transition">
+          Download Free Checklist
+        </a>
+      </div>
+    </div>
+  </div>
+</section>

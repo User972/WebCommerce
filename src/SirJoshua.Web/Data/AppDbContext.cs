@@ -11,6 +11,11 @@ public class AppDbContext : DbContext
     public DbSet<Order> Orders => Set<Order>();
     public DbSet<OrderItem> OrderItems => Set<OrderItem>();
 
+    // IELTS Band 7 Plus™ funnel: leads, bookings and writing-feedback submissions.
+    public DbSet<Lead> Leads => Set<Lead>();
+    public DbSet<WritingFeedbackSubmission> WritingFeedbackSubmissions => Set<WritingFeedbackSubmission>();
+    public DbSet<WritingFeedbackPackage> WritingFeedbackPackages => Set<WritingFeedbackPackage>();
+
     protected override void OnModelCreating(ModelBuilder b)
     {
         base.OnModelCreating(b);
@@ -27,6 +32,14 @@ public class AppDbContext : DbContext
              .HasForeignKey(i => i.OrderId)
              .OnDelete(DeleteBehavior.Cascade);
         });
+
+        b.Entity<Lead>(e =>
+        {
+            e.HasIndex(l => l.ReferenceNumber);
+            e.HasIndex(l => l.CreatedAt);
+        });
+        b.Entity<WritingFeedbackSubmission>(e => e.HasIndex(s => s.ReferenceNumber));
+        b.Entity<WritingFeedbackPackage>(e => e.HasIndex(p => p.ReferenceNumber));
 
         b.Entity<Ebook>().HasData(SeedData.Ebooks);
     }

@@ -13,6 +13,10 @@ builder.Services
     .Bind(builder.Configuration.GetSection(PayPalOptions.SectionName))
     .ValidateDataAnnotations();
 
+builder.Services
+    .AddOptions<NotificationOptions>()
+    .Bind(builder.Configuration.GetSection(NotificationOptions.SectionName));
+
 // ---- Database (PostgreSQL via Npgsql) ----
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection")
     ?? throw new InvalidOperationException("Connection string 'DefaultConnection' was not configured.");
@@ -21,6 +25,10 @@ builder.Services.AddDbContext<AppDbContext>(opt => opt.UseNpgsql(connectionStrin
 // ---- HTTP client for PayPal ----
 builder.Services.AddHttpClient<IPayPalClient, PayPalClient>();
 builder.Services.AddScoped<IOrderService, OrderService>();
+
+// ---- Lead capture / enquiry funnel ----
+builder.Services.AddScoped<IEnquiryService, EnquiryService>();
+builder.Services.AddSingleton<INotificationService, LoggingNotificationService>();
 
 // ---- MVC + anti-forgery ----
 builder.Services.AddControllersWithViews(options =>

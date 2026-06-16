@@ -45,7 +45,13 @@ public class OrderConfirmation
 
 public class HomeViewModel
 {
+    /// <summary>The flagship "Band 7+ Formula" catalog row (drives price + add-to-cart). May be null
+    /// if the catalog has not been seeded yet.</summary>
+    public Models.Ebook? Flagship { get; set; }
+
+    /// <summary>Supporting practice-resource library (everything except the flagship).</summary>
     public List<Models.Ebook> Ebooks { get; set; } = new();
+
     public string PayPalClientId { get; set; } = string.Empty;
     public string PayPalCurrency { get; set; } = "USD";
     public bool PayPalEnabled { get; set; }

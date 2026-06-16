@@ -71,7 +71,7 @@ public class CheckoutController : ControllerBase
 
         var order = await _orders.GetByPayPalOrderIdAsync(request.PayPalOrderId, ct);
         if (order is null)
-            return NotFound(new { error = "Pesanan tidak ditemukan." });
+            return NotFound(new { error = "Order not found." });
 
         // Idempotent: if a retry hits an already-captured order, just return the confirmation.
         if (order.Status == Models.OrderStatus.Paid)
@@ -91,7 +91,7 @@ public class CheckoutController : ControllerBase
         if (!string.Equals(capture.Status, "COMPLETED", StringComparison.OrdinalIgnoreCase))
         {
             await _orders.MarkFailedAsync(order, ct);
-            return BadRequest(new { error = "Pembayaran tidak selesai." });
+            return BadRequest(new { error = "Payment was not completed." });
         }
 
         // Defense in depth: confirm PayPal settled the exact amount and currency we created.
@@ -100,7 +100,7 @@ public class CheckoutController : ControllerBase
             _log.LogWarning("Amount mismatch on {OrderNumber}: expected {Expected} {Cur}, captured {Actual} {CapCur}",
                 order.OrderNumber, order.AmountUsd, order.Currency, capture.Amount, capture.Currency);
             await _orders.MarkFailedAsync(order, ct);
-            return BadRequest(new { error = "Jumlah pembayaran tidak sesuai." });
+            return BadRequest(new { error = "Payment amount did not match." });
         }
 
         await _orders.MarkPaidAsync(order, capture.CaptureId ?? string.Empty, capture.Amount, ct);

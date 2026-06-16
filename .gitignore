@@ -15,8 +15,14 @@ project.lock.json
 
 # Secrets — never commit real PayPal credentials or connection strings with passwords.
 # Use `dotnet user-secrets` (development) or environment variables (production).
+appsettings.Local.json
 appsettings.*.Local.json
 secrets.json
+
+# Publish output / deployment artifacts
+[Pp]ublish/
+publish-test/
+*.zip
 
 # OS
 .DS_Store

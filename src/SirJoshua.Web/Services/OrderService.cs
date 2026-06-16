@@ -53,7 +53,7 @@ public class OrderService : IOrderService
         }
 
         if (requested.Count == 0)
-            throw new CartValidationException("Keranjang kosong.");
+            throw new CartValidationException("Your cart is empty.");
 
         var ids = requested.Keys.ToList();
         var products = await _db.Ebooks
@@ -61,7 +61,7 @@ public class OrderService : IOrderService
             .ToDictionaryAsync(e => e.Id, ct);
 
         if (products.Count != requested.Count)
-            throw new CartValidationException("Ada produk yang tidak ditemukan.");
+            throw new CartValidationException("One or more products could not be found.");
 
         var items = new List<OrderItem>();
         var subtotal = 0;

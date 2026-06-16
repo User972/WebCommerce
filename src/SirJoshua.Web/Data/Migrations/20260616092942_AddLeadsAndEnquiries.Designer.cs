@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using SirJoshua.Web.Data;
@@ -11,9 +12,11 @@ using SirJoshua.Web.Data;
 namespace SirJoshua.Web.Data.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260616092942_AddLeadsAndEnquiries")]
+    partial class AddLeadsAndEnquiries
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -101,7 +104,7 @@ namespace SirJoshua.Web.Data.Migrations
                             IsBundle = false,
                             Meta = "Digital guide · PDF",
                             PriceIdr = 399000,
-                            Rating = 0m,
+                            Rating = 5.0m,
                             ReviewCount = 0,
                             Series = "IELTS · Writing",
                             SortOrder = 0,
@@ -111,14 +114,15 @@ namespace SirJoshua.Web.Data.Migrations
                         {
                             Id = "writing-playbook",
                             Author = "Sir Joshua Academy",
+                            Badge = "Best seller",
                             Category = "IELTS",
                             Cover = "teal",
                             Description = "Answer frameworks for Task 1 & 2 to stay consistent at band 7+.",
                             IsBundle = false,
                             Meta = "248 pp · PDF + EPUB",
                             PriceIdr = 149000,
-                            Rating = 0m,
-                            ReviewCount = 0,
+                            Rating = 4.9m,
+                            ReviewCount = 128,
                             Series = "IELTS · Writing",
                             SortOrder = 1,
                             Title = "The IELTS Writing Playbook"
@@ -133,8 +137,8 @@ namespace SirJoshua.Web.Data.Migrations
                             IsBundle = false,
                             Meta = "180 pp · PDF",
                             PriceIdr = 129000,
-                            Rating = 0m,
-                            ReviewCount = 0,
+                            Rating = 4.8m,
+                            ReviewCount = 96,
                             Series = "IELTS · Speaking",
                             SortOrder = 2,
                             Title = "Speaking Without Fear"
@@ -149,8 +153,8 @@ namespace SirJoshua.Web.Data.Migrations
                             IsBundle = false,
                             Meta = "132 pp · PDF",
                             PriceIdr = 89000,
-                            Rating = 0m,
-                            ReviewCount = 0,
+                            Rating = 4.6m,
+                            ReviewCount = 54,
                             Series = "IELTS · Reading",
                             SortOrder = 3,
                             Title = "Reading Speed & Skimming"
@@ -159,14 +163,15 @@ namespace SirJoshua.Web.Data.Migrations
                         {
                             Id = "vocab-builder",
                             Author = "Sir Joshua Academy",
+                            Badge = "Best seller",
                             Category = "General",
                             Cover = "gold",
                             Description = "The 1,200 most common academic words, complete with example sentences.",
                             IsBundle = false,
                             Meta = "210 pp · PDF + EPUB",
                             PriceIdr = 99000,
-                            Rating = 0m,
-                            ReviewCount = 0,
+                            Rating = 4.9m,
+                            ReviewCount = 203,
                             Series = "General · Vocabulary",
                             SortOrder = 4,
                             Title = "Academic Vocabulary Builder"
@@ -175,14 +180,15 @@ namespace SirJoshua.Web.Data.Migrations
                         {
                             Id = "listening-focus",
                             Author = "Sir Joshua Academy",
+                            Badge = "New",
                             Category = "IELTS",
                             Cover = "ink",
                             Description = "Prediction and note-taking techniques to lift your IELTS Listening score.",
                             IsBundle = false,
                             Meta = "150 pp · PDF",
                             PriceIdr = 99000,
-                            Rating = 0m,
-                            ReviewCount = 0,
+                            Rating = 4.7m,
+                            ReviewCount = 41,
                             Series = "IELTS · Listening",
                             SortOrder = 5,
                             Title = "Listening: Predict & Note"
@@ -197,8 +203,8 @@ namespace SirJoshua.Web.Data.Migrations
                             IsBundle = false,
                             Meta = "176 pp · PDF",
                             PriceIdr = 109000,
-                            Rating = 0m,
-                            ReviewCount = 0,
+                            Rating = 4.8m,
+                            ReviewCount = 67,
                             Series = "General · Grammar",
                             SortOrder = 6,
                             Title = "Grammar Essentials for Band 7+"
@@ -214,7 +220,7 @@ namespace SirJoshua.Web.Data.Migrations
                             IsBundle = true,
                             Meta = "6 guides · PDF + EPUB",
                             PriceIdr = 499000,
-                            Rating = 0m,
+                            Rating = 5.0m,
                             ReviewCount = 0,
                             Series = "Bundle · Practice",
                             SortOrder = 7,
@@ -248,10 +254,6 @@ namespace SirJoshua.Web.Data.Migrations
                         .IsRequired()
                         .HasMaxLength(120)
                         .HasColumnType("character varying(120)");
-
-                    b.Property<string>("IeltsModule")
-                        .HasMaxLength(32)
-                        .HasColumnType("character varying(32)");
 
                     b.Property<string>("InterestType")
                         .HasMaxLength(80)

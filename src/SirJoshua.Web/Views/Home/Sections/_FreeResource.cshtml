@@ -1,0 +1,87 @@
+@model SirJoshua.Web.ViewModels.HomeViewModel
+@{
+    var c = SiteContent.Checklist;
+}
+<!-- ============== FREE RESOURCE / LEAD MAGNET ============== -->
+<section id="free-checklist" class="py-20 md:py-28 bg-teal-700 text-parch relative overflow-hidden" aria-labelledby="free-heading">
+  <div class="absolute inset-0 -z-0 pointer-events-none">
+    <div class="absolute -bottom-40 -right-24 w-[560px] h-[560px] rounded-full bg-terra-400/20 blur-2xl"></div>
+    <div class="absolute -top-32 -left-32 w-[480px] h-[480px] rounded-full bg-teal-800/40 blur-2xl"></div>
+    <div class="absolute inset-0 grain opacity-50"></div>
+  </div>
+
+  <div class="relative max-w-[1280px] mx-auto px-5 md:px-8">
+    <div class="grid lg:grid-cols-2 gap-10 items-center">
+      <!-- Left: copy -->
+      <div>
+        <div class="font-mono uppercase tracking-[0.18em] text-[11.5px] text-terra-400">— Free resource</div>
+        <h2 id="free-heading" class="mt-3 font-display text-[40px] md:text-[52px] font-medium leading-[1.02] text-parch">
+          Download the Free IELTS Study Checklist
+        </h2>
+        <p class="mt-5 text-[16.5px] md:text-[17px] leading-relaxed text-parch/80 max-w-[560px]">@c.Description</p>
+
+        <ul class="mt-8 space-y-3 max-w-[540px]">
+@foreach (var benefit in c.Benefits)
+{
+          <li class="flex items-start gap-3 text-[15px] text-parch/90">
+            <svg class="w-5 h-5 mt-0.5 text-terra-400 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M20 6 9 17l-5-5"/></svg>
+            <span>@benefit</span>
+          </li>
+}
+        </ul>
+
+        <p class="mt-7 inline-flex items-center gap-2 text-[13px] text-parch/65">
+          <svg class="w-4 h-4 text-terra-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+          No spam. Unsubscribe anytime.
+        </p>
+      </div>
+
+      <!-- Right: inline lead form -->
+      <div class="bg-card text-ink rounded-[20px] p-6 md:p-7 shadow-[0_30px_80px_-40px_rgba(6,30,30,.55)]">
+        <div class="font-mono uppercase tracking-[0.16em] text-[10.5px] text-terra-600">Get it free</div>
+        <h3 class="mt-1.5 font-display text-[22px] font-semibold leading-tight">Send me the checklist</h3>
+
+        <form data-enquiry-form="FreeChecklist" novalidate class="mt-5 space-y-4">
+          <div>
+            <label for="fc-name" class="field-label">First name</label>
+            <input id="fc-name" name="FullName" type="text" class="field-input" autocomplete="given-name" placeholder="Your first name" required>
+          </div>
+          <div>
+            <label for="fc-email" class="field-label">Email</label>
+            <input id="fc-email" name="Email" type="email" class="field-input" autocomplete="email" placeholder="you@example.com" required>
+          </div>
+          <div>
+            <label for="fc-whatsapp" class="field-label">WhatsApp number <span class="text-ink/45 font-normal">(optional)</span></label>
+            <input id="fc-whatsapp" name="WhatsApp" type="tel" class="field-input" autocomplete="tel" placeholder="+62 …">
+          </div>
+          <div class="grid sm:grid-cols-2 gap-4">
+            <div>
+              <label for="fc-band" class="field-label">IELTS target band <span class="text-ink/45 font-normal">(optional)</span></label>
+              <select id="fc-band" name="TargetBand" class="field-select">
+                <option value="">Select…</option>
+                <option value="6.0">6.0</option>
+                <option value="6.5">6.5</option>
+                <option value="7.0">7.0</option>
+                <option value="7.5">7.5</option>
+                <option value="8.0">8.0</option>
+                <option value="8.5">8.5</option>
+                <option value="9.0">9.0</option>
+              </select>
+            </div>
+            <div>
+              <label for="fc-date" class="field-label">Planned test date <span class="text-ink/45 font-normal">(optional)</span></label>
+              <input id="fc-date" name="TestDate" type="date" class="field-input">
+            </div>
+          </div>
+
+          <div class="honeypot">
+            <label>Leave empty<input type="text" name="Website" tabindex="-1" autocomplete="off"></label>
+          </div>
+
+          <button type="submit" class="btn-primary w-full">Get Free IELTS Checklist</button>
+          <p class="text-center text-[11.5px] text-ink/50">We’ll email your checklist and a short study series.</p>
+        </form>
+      </div>
+    </div>
+  </div>
+</section>

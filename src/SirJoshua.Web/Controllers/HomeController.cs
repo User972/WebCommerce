@@ -26,16 +26,35 @@ public class HomeController : Controller
             .OrderBy(e => e.SortOrder)
             .ToListAsync(ct);
 
-        var vm = new HomeViewModel
+        var vm = BuildHomeViewModel(ebooks);
+        return View(vm);
+    }
+
+    [Route("/band-7-formula")]
+    [Route("/ielts-writing-mastery")]
+    public async Task<IActionResult> BandSevenFormula(CancellationToken ct)
+    {
+        var flagship = await _db.Ebooks
+            .FirstOrDefaultAsync(e => e.Id == Data.SeedData.FlagshipId, ct);
+
+        var vm = BuildHomeViewModel(flagship is null ? new List<Ebook>() : new List<Ebook> { flagship });
+        return View(vm);
+    }
+
+    private HomeViewModel BuildHomeViewModel(List<Ebook> ebooks)
+    {
+        var flagship = ebooks.FirstOrDefault(e => e.Id == Data.SeedData.FlagshipId);
+        return new HomeViewModel
         {
-            Ebooks = ebooks,
+            Flagship = flagship,
+            // Secondary library = everything except the flagship (it has its own premium section).
+            Ebooks = ebooks.Where(e => e.Id != Data.SeedData.FlagshipId).ToList(),
             PayPalClientId = _paypal.ClientId,
             PayPalCurrency = _paypal.Currency,
             PayPalEnabled = _paypal.IsConfigured,
             IdrPerUsd = _paypal.IdrPerUsd,
             PromoCode = _paypal.PromoCode
         };
-        return View(vm);
     }
 
     [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
