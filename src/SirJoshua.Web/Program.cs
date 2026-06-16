@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.EntityFrameworkCore;
+using SendGrid;
 using SirJoshua.Web.Data;
 using SirJoshua.Web.Middleware;
 using SirJoshua.Web.Options;
@@ -28,7 +29,22 @@ builder.Services.AddScoped<IOrderService, OrderService>();
 
 // ---- Lead capture / enquiry funnel ----
 builder.Services.AddScoped<IEnquiryService, EnquiryService>();
-builder.Services.AddSingleton<INotificationService, LoggingNotificationService>();
+
+// Email delivery: use SendGrid when an API key is configured (key comes from a secret store /
+// environment variable, e.g. Notifications__SendGrid__ApiKey), otherwise fall back to logging so
+// the funnel still captures and confirms leads without a mail provider.
+var notificationOptions = builder.Configuration
+    .GetSection(NotificationOptions.SectionName).Get<NotificationOptions>() ?? new NotificationOptions();
+
+if (notificationOptions.SendGrid.IsConfigured)
+{
+    builder.Services.AddSingleton<ISendGridClient>(_ => new SendGridClient(notificationOptions.SendGrid.ApiKey));
+    builder.Services.AddSingleton<INotificationService, SendGridNotificationService>();
+}
+else
+{
+    builder.Services.AddSingleton<INotificationService, LoggingNotificationService>();
+}
 
 // ---- MVC + anti-forgery ----
 builder.Services.AddControllersWithViews(options =>

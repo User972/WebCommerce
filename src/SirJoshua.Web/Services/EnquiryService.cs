@@ -99,11 +99,22 @@ public class EnquiryService : IEnquiryService
             ["Source"] = lead.SourcePage,
         }, ct);
 
-        // For the free checklist, attempt to deliver the resource; fall back gracefully.
+        // For the free checklist, attempt to deliver the resource and tailor the confirmation copy
+        // to what actually happened (sent now vs. queued for follow-up), so we never imply an email
+        // went out when it didn't.
         if (type == LeadType.FreeChecklist)
         {
-            await _notify.SendCustomerResourceAsync(email, "Your Free IELTS Study Checklist",
-                "Here is your Free IELTS Study Checklist.", ct);
+            var sent = await _notify.SendCustomerResourceAsync(email, "Your Free IELTS Study Checklist",
+                "Thanks for requesting the Free IELTS Study Checklist. Here it is — plus a short study series to help you prepare for Band 7+.", ct);
+
+            _log.LogInformation("Captured {Type} lead {Ref} (checklist emailed: {Sent})", type, reference, sent);
+            return new EnquiryResult
+            {
+                ReferenceNumber = reference,
+                Message = sent
+                    ? "Thank you! Your Free IELTS Study Checklist is on its way — please check your email (including spam/promotions)."
+                    : "Thank you! Your request has been received — we'll email your Free IELTS Study Checklist shortly.",
+            };
         }
 
         _log.LogInformation("Captured {Type} lead {Ref}", type, reference);
@@ -191,7 +202,7 @@ public class EnquiryService : IEnquiryService
         LeadType.WritingFeedbackPackage =>
             "Thank you. Your request for 3 writing reviews has been received. We will send payment/access instructions and set up your three review credits shortly.",
         LeadType.FreeChecklist =>
-            "Thank you. Your Free IELTS Study Checklist request has been received. Please check your email for the resource.",
+            "Thank you. Your Free IELTS Study Checklist request has been received — we'll email it to you shortly.",
         LeadType.Contact =>
             "Thank you. Your enquiry has been received. We will get back to you soon.",
         LeadType.Waitlist =>
